@@ -29,7 +29,7 @@ app.use((_, res) => {
 app.use((error, req, res, next) => {
     const {status = 500,  message = 'Internal Server Error'} = err;
     res.status(status), json({message});
-})
+});
 
 app.listen(8080, () => {
     console.log("Server is running. Use our API on port: 8080")
