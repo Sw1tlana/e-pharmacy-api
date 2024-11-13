@@ -1,12 +1,14 @@
 import express from "express";
+import { getStoresList, 
+         getNearestMedicineStores } from "../controllers/storesController.js";
 
 const storesRouter = express.Router();
 
 // Роут для отримання списку аптек
-storesRouter.get('/stores/list', getStoresList);
+storesRouter.get('/list', getStoresList);
 
 // Роут для отримання найближчих аптек
-storesRouter.get('/stores/nearest', getNearestMedicineStores);
+storesRouter.get('/nearest', getNearestMedicineStores);
 
 
 

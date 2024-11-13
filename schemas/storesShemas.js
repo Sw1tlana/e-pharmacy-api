@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const nearestPharciesSchema = Joi.object({  
+export const nearestPharmsSchema = Joi.object({  
     name: Joi.string().required(),
     address: Joi.string().required(),
     city: Joi.string().required(),
@@ -8,7 +8,7 @@ export const nearestPharciesSchema = Joi.object({
     rating: Joi.string().min(1).max(5).required()
 });
 
-export const pharciesSchema = Joi.object({  
+export const pharmsSchema = Joi.object({  
     name: Joi.string().required(),
     address: Joi.string().required(),
     city: Joi.string().required(),

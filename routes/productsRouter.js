@@ -1,4 +1,7 @@
 import express from "express";
+import { getMedicines,
+    getProductDetails
+ } from "../controllers/productsControllers.js";
 
 const productsRouter = express.Router();
 
