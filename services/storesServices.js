@@ -9,3 +9,13 @@ export const getNearestMedicineStoresService = async() => {
  throw error;
  }
 };
+
+export const getMedicineStoresService = async() => {
+   try {
+      const stores = await Store.find();
+      return stores;
+      
+   } catch (error) {
+      throw error;
+   }
+};

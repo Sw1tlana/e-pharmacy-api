@@ -11,7 +11,7 @@ const nearestPharmsSchema = new mongoose.Schema({
     },
     city: {
         type: String,
-        require: true,
+        required: true,
     },
     phone: {
         type: String,
@@ -19,7 +19,7 @@ const nearestPharmsSchema = new mongoose.Schema({
         match: /^\+?[0-9]{10,15}$/,
     },
     rating: {
-        type: String,
+        type: Number,
         required: true,
         min: 1,
         max: 5,

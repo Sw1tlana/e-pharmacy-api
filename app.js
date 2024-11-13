@@ -19,10 +19,10 @@ app.use(morgan("tiny"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use('/stores', storesRouter);
-app.use('/products', productsRouter);
-app.use('/customer', reviewsRouter);
-app.use('/cart', cartRouter);
+app.use('/api/stores', storesRouter);
+app.use('/api/products', productsRouter);
+app.use('/api/customer-reviews', reviewsRouter);
+app.use('/api/cart', cartRouter);
 
 app.use('/favicon.ico', (req, res) => {
     res.sendStatus(204); 

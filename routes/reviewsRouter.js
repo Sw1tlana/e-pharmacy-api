@@ -3,7 +3,7 @@ import { getCustomerReviews } from "../controllers/reviewsControllers.js";
 
 const reviewsRouter = express.Router();
 
-reviewsRouter.get('/customer/reviews', getCustomerReviews);
+reviewsRouter.get('/', getCustomerReviews);
 
 
 export default reviewsRouter;
