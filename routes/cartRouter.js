@@ -6,11 +6,11 @@ import { getCartItems,
 
 const cartRouter = express.Router();
 
-cartRouter.get('/cart', getCartItems);
+cartRouter.get('/', getCartItems);
 
 // Роут для оновлення корзини
-cartRouter.put('/cart', updateCart);
+cartRouter.put('/', updateCart);
 
-cartRouter.post('/cart/checkout', checkout);
+cartRouter.post('/checkout', checkout);
 
 export default cartRouter;
