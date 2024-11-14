@@ -2,7 +2,9 @@ import Cart from "../models/cart.js";
 
 export const getCartItemsServices = async () => {
   try {
-   const cart = await Cart.find();
+   const cart = await Cart.find()
+   .populate("products.productId")  
+   .exec();
    return cart;
 
   } catch(error) {
@@ -10,20 +12,61 @@ export const getCartItemsServices = async () => {
   }
 };
 
-export const checkoutServices = async (cartItems, userDetails) => {
-  try {
-    const order = {
-      orderId: Date.now(),
-      items: cartItems,
-      userDetails,
-      totalAmount: cartItems.reduce((total, item) => total + item.price * item.quantity, 0),
-      status: 'Successful',
-    };
-    
-    const createdCart = await Cart.create(order);
+export const checkoutServices = async (products, { 
+  userId, 
+  totalAmount, 
+  status, 
+  order_date }) => {
 
-    return createdCart; 
+  try {
+    const cartData = {
+      userId,
+      products,
+      totalAmount,
+      status,
+      order_date,
+    };
+
+    const createdCart = await Cart.create(cartData); 
+
+    return createdCart;
   } catch (error) {
     throw error;
   }
+};
+
+export const updateCartServices = async (userId, updatedProducts) => {
+  try {
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      throw new Error('The cart is empty');
+    };
+
+    updatedProducts.forEach((updatedProduct) => {
+      const productIndex = cart.products.findIndex(
+        (product) => product.productId.toString() === updatedProduct.productId.toString()
+      );
+    
+      if (productIndex !== -1) {
+        cart.products[productIndex].quantity = updatedProduct.quantity;
+        cart.products[productIndex].totalPrice = updatedProduct.quantity * cart.products[productIndex].price;
+      } else {
+        
+        cart.products.push({
+          productId: updatedProduct.productId,
+          quantity: updatedProduct.quantity,
+          price: updatedProduct.price,
+          totalPrice: updatedProduct.quantity * updatedProduct.price,
+        });
+      }
+    });
+    cart.totalAmount = cart.products.reduce((total, product) => total + product.totalPrice, 0);
+    await cart.save();
+    return cart;
+
+  }catch (error) {
+    throw error;
+  }
+
 };

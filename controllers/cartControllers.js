@@ -1,13 +1,17 @@
-import Cart from "../models/cart.js";
 import { getCartItemsServices,
-         checkoutServices
+         checkoutServices,
+         updateCartServices
 } from "../services/cartServices.js";
 import mongoose from 'mongoose';
-// import { isValidObjectId } from "mongoose";
      
 export const getCartItems = async (req, res, next) => {
    try {
     const cart = await getCartItemsServices();
+
+    if (cart.length === 0) {
+      return res.status(404).json({ message: "Cart is empty" });
+    };
+
     res.status(200).json(cart);
 
    } catch (error) {
@@ -15,34 +19,40 @@ export const getCartItems = async (req, res, next) => {
    }
 };
 
-export const updateCart = (req, res, next) => {
+export const updateCart = async (req, res, next) => {
 
+  try {
+    const { userId, updatedProducts} = req.body;
+    const updatedCartItem = await updateCartServices(userId, updatedProducts);
+    res.status(200).json({ message: "Cart updated successfully!", cart: updatedCartItem });
+
+  } catch(error) {
+    next(error);
+  }
 };
 
 export const checkout = async (req, res, next) => {
     try {
-      const { error } = Cart.validate(req.body);
-  
-      if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-      }
-  
-      const { products, totalAmount, status, order_date } = req.body;
+      const { products, totalAmount, status, order_date, userId } = req.body;
 
       const updatedProducts = products.map(product => ({
         ...product,
-        productId: new mongoose.Types.ObjectId(product.productId),
+        productId: new mongoose.Types.ObjectId(product.productId), 
       }));
+  
+      const cartUserId = new mongoose.Types.ObjectId(userId); 
+  
+      const newCart = await checkoutServices(
+        updatedProducts, 
+        {
+          userId: cartUserId,
+          totalAmount,
+          status,
+          order_date,
+        }
+      );
       
-      const cart = await checkoutServices.create({
-        userId,
-        products: updatedProducts,
-        totalAmount,
-        status,
-        order_date,
-      });
-
-      res.status(200).json({ message: 'Кошик створено успішно!', cart });
+      res.status(200).json({ message: 'Cart created successfully!', cart: newCart });
     } catch (err) {
       next(err);
     }

@@ -5,13 +5,18 @@ import { getMedicinesProductsServises,
  } from "../services/productsServices.js";
 
 export const getMedicinesProducts = async (req, res, next) => {
-   let { page = 1, limit = 12 } = req.query;
 
-   page = parseInt(page, 12);
-   limit = parseInt(limit, 12);
+   let { page = 1, limit = 12, filter = {} } = req.query;
+
+   page = parseInt(page, 10);
+   limit = parseInt(limit, 10);
+
+   if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    return res.status(400).json({ message: "Bad request. Invalid page or limit." });
+  }
 
    try {
-    const products = await getMedicinesProductsServises();
+    const products = await getMedicinesProductsServises(filter, page, limit);
     res.status(200).json(products);
     
    }catch(error) {
@@ -32,6 +37,7 @@ export const getProductDetails = async (req, res, next) => {
          return res.status(404).json({ message: "Contact not found" });
        }
        res.status(200).json(product);
+
     } catch(error) {
       next(error);
     }

@@ -9,7 +9,7 @@ const cartRouter = express.Router();
 cartRouter.get('/', getCartItems);
 
 // Роут для оновлення корзини
-cartRouter.put('/', updateCart);
+cartRouter.put('/update', updateCart);
 
 cartRouter.post('/checkout', checkout);
 

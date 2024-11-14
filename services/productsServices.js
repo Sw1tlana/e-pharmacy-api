@@ -1,6 +1,6 @@
 import Product from "../models/products.js";
 
-export const getMedicinesProductsServises = async (filter, page, limit) => {
+export const getMedicinesProductsServises = async (filter= {}, page, limit) => {
   try {
   const skip = (page - 1) * limit;
   const products = await Product.find(filter).skip(skip).limit(limit);
