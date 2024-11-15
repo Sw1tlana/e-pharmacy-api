@@ -8,6 +8,7 @@ import storesRouter from "./routes/storesRouter.js";
 import productsRouter from "./routes/productsRouter.js";
 import reviewsRouter from "./routes/reviewsRouter.js";
 import cartRouter from "./routes/cartRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 import './db.js';
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/stores', storesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/customer-reviews', reviewsRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/user', userRouter);
 
 app.use('/favicon.ico', (req, res) => {
     res.sendStatus(204); 
@@ -37,7 +39,7 @@ app.use((_, res) => {
   });
   
   app.use((err, req, res, next) => {
-    const { status = 500, message = "Server error" } = err;
+    const { status = 500, message = "Internal Server error" } = err;
     res.status(status).json({ message });
   });
 

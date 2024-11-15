@@ -1,0 +1,65 @@
+import usersServices from "../services/usersServices.js";
+
+export const register = async (req, res, next) => {
+    try {
+   const { name, email, phone, password } = req.body;
+
+   const result = await usersServices.userRegistersServices({
+      name,
+      email,
+      phone,
+      password,
+   });
+
+   if (result === null) {
+    return res.status(409).send({ message: "Email in use" });
+  };
+
+  return res.status(201).send({
+    message: "Registration successfully!"
+  });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).send({ message: "Email and password are required" });
+    }
+
+    const result = await usersServices.userLoginServices(email, password);
+
+    if (result === null) {
+      return res.status(401).send({ message: "Email or password is wrong" });
+    }
+
+    if (result === false) {
+      return res.status(401).send({ message: "Please verify your email" });
+    }
+
+    return res.status(200).send({
+      user: {
+        email: result.email,
+      },
+      message: "Login successful"
+    });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    next(error);
+  }
+};
+
+
+export default {
+    register,
+    login
+};
+
+
+
