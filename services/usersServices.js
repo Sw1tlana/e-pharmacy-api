@@ -1,5 +1,6 @@
 import User from '../models/users.js';
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const userRegistersServices = async (information) => {
   
@@ -40,16 +41,28 @@ export const userLoginServices = async (email, password) => {
       if (!isMatch) {
         return null;
       }
-  
-      return user;
+     const token = jwt.sign({ id: user._id, name: user.name }, 
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "2h"
+      }
+    )
+   
+    await User.findByIdAndUpdate(user._id, { token });
+
+    return { token, user };
   
     } catch (error) {
-      console.error("Error in userLoginServices:", error);
       throw new Error("Internal server error during login");
     }
   };
 
+export const userLogoutService = async(id) => {
+    await User.findByIdAndUpdate(id, { token: null }, { new: true });
+};
+
 export default {
  userRegistersServices,
- userLoginServices
+ userLoginServices,
+ userLogoutService
 };

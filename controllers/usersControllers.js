@@ -1,3 +1,4 @@
+import { token } from "morgan";
 import usersServices from "../services/usersServices.js";
 
 export const register = async (req, res, next) => {
@@ -43,6 +44,7 @@ export const login = async (req, res, next) => {
     }
 
     return res.status(200).send({
+      token: result.token,
       user: {
         email: result.email,
       },
@@ -55,10 +57,23 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const logout = async (req, res, next) => {
+  try {
+   await usersServices.userLogoutService(req.user.id);
+   console.log(`User ${req.user.id} logged out successfully.`);
+   return res.status(204).end();
+   
+ } catch (error) {
+  console.error("Error during logout:", error);
+  next(error);
+ }
+};
+
 
 export default {
     register,
-    login
+    login,
+    logout
 };
 
 

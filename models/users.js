@@ -19,6 +19,10 @@ const usersSchema = new mongoose.Schema({
     required: true,
     match: /^\+?[0-9]{10,15}$/,
    },
+   token: {
+      type: String,
+      default: null,
+   },
 },
    {
     versionKey: false,
