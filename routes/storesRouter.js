@@ -4,10 +4,8 @@ import { getStoresList,
 
 const storesRouter = express.Router();
 
-// Роут для отримання списку аптек
 storesRouter.get('/list', getStoresList);
 
-// Роут для отримання найближчих аптек
 storesRouter.get('/nearest', getNearestMedicineStores);
 
 

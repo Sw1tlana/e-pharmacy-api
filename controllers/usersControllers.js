@@ -1,5 +1,4 @@
-import { token } from "morgan";
-import usersServices from "../services/usersServices.js";
+import usersServices, { getUserInfoServices } from "../services/usersServices.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -52,7 +51,6 @@ export const login = async (req, res, next) => {
     });
 
   } catch (error) {
-    console.error("Login error:", error);
     next(error);
   }
 };
@@ -60,20 +58,31 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   try {
    await usersServices.userLogoutService(req.user.id);
-   console.log(`User ${req.user.id} logged out successfully.`);
+
    return res.status(204).end();
    
  } catch (error) {
-  console.error("Error during logout:", error);
   next(error);
  }
 };
 
+export const getUserInfo = async (req, res) => {
+  try {
+    const { userId } = req.query;
+
+    const userInfo = await getUserInfoServices(userId);
+
+  res.json(userInfo);
+  } catch (error) {
+   return res.status(500).json({message: 'Error retrieving user information'});
+  }
+};
 
 export default {
     register,
     login,
-    logout
+    logout,
+    getUserInfo
 };
 
 

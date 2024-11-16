@@ -19,12 +19,11 @@ function auth(req, res, next) {
     }
     try {
       const user = await User.findById(decode.id);
+
       if (user === null) {
-        console.log(`User with ID ${decode.id} not found.`);
         return res.status(401).send({ message: "Not authorized" });
       }
       if (token !== user.token) {
-        console.log("Token does not match the stored token for the user.");
         return res.status(401).send({ message: "Not authorized" });
       }
 

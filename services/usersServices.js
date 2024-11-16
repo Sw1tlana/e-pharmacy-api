@@ -41,14 +41,8 @@ export const userLoginServices = async (email, password) => {
       if (!isMatch) {
         return null;
       }
-     const token = jwt.sign({ id: user._id, name: user.name }, 
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "2h"
-      }
-    )
-   
-    await User.findByIdAndUpdate(user._id, { token });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      await User.findByIdAndUpdate(user._id, { token });
 
     return { token, user };
   
@@ -58,11 +52,35 @@ export const userLoginServices = async (email, password) => {
   };
 
 export const userLogoutService = async(id) => {
+  try {
     await User.findByIdAndUpdate(id, { token: null }, { new: true });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserInfoServices = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+     throw new Error('User not found!');
+    }
+
+    return {
+      name: user.name,
+      email: user.email
+    };
+
+  } catch(error) {
+    throw error;
+  }
+
 };
 
 export default {
  userRegistersServices,
  userLoginServices,
- userLogoutService
+ userLogoutService,
+ getUserInfoServices
 };

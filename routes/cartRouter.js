@@ -3,15 +3,14 @@ import { getCartItems,
          updateCart,
          checkout
  } from "../controllers/cartControllers.js";
- import authMiddleware from "../middlewares/auth.js";
+ import authMiddlewares from "../middlewares/auth.js";
 
 const cartRouter = express.Router();
 
-cartRouter.get('/', getCartItems);
+cartRouter.get('/', authMiddlewares, getCartItems);
 
-// Роут для оновлення корзини
-cartRouter.put('/update', authMiddleware, updateCart);
+cartRouter.put('/update', authMiddlewares, updateCart);
 
-cartRouter.post('/checkout', checkout);
+cartRouter.post('/checkout', authMiddlewares, checkout);
 
 export default cartRouter;
