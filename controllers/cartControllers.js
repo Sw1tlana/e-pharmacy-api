@@ -33,7 +33,13 @@ export const updateCart = async (req, res, next) => {
 
 export const checkout = async (req, res, next) => {
     try {
-      const { products, totalAmount, status, order_date, userId } = req.body;
+      const { 
+        products, 
+        totalAmount, 
+        status, 
+        order_date, 
+        userId, 
+        paymentMethod } = req.body;
 
       const updatedProducts = products.map(product => ({
         ...product,
@@ -49,6 +55,7 @@ export const checkout = async (req, res, next) => {
           totalAmount,
           status,
           order_date,
+          paymentMethod,
         }
       );
       
