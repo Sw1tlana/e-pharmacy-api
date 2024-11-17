@@ -36,6 +36,11 @@ const cartSchema = new mongoose.Schema({
     enum: ['Pending', 'Completed', 'Cancelled'], 
     default: 'Pending',
   },
+  paymentMethod: { 
+    type: String,
+    required: true, 
+    enum: ['bank', 'cash'], 
+  },
 }, {
   timestamps: true, 
 });

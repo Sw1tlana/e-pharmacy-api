@@ -14,17 +14,20 @@ export const getCartItemsServices = async () => {
 
 export const checkoutServices = async (products, { 
   userId, 
-  totalAmount, 
   status, 
-  order_date }) => {
+  order_date,
+  paymentMethod, }) => {
 
   try {
+    const totalAmount = products.reduce((acc, product) => acc + product.totalPrice, 0);
+
     const cartData = {
       userId,
       products,
       totalAmount,
       status,
       order_date,
+      paymentMethod,
     };
 
     const createdCart = await Cart.create(cartData); 

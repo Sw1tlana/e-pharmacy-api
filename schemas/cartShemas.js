@@ -12,5 +12,6 @@ export const createCartSchema = Joi.object({
    ).required(),
    totalAmount: Joi.number().required(),
    status: Joi.string().valid('Pending', 'Completed', 'Cancelled').required(), 
-   order_date: Joi.date().required(), 
+   order_date: Joi.date().required(),
+   paymentMethod: Joi.string().valid('bank', 'cash').required(), 
  });
