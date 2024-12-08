@@ -22,7 +22,13 @@ export const userRegistersServices = async (information) => {
         password: passwordHash, 
       });
 
-      return newUser;
+      const token = jwt.sign(
+        { id: newUser._id, email: newUser.email },
+        process.env.JWT_SECRET, 
+        { expiresIn: '1h' } 
+    );
+
+    return { user: newUser, token };
     } catch (error) {
         throw error;
     }

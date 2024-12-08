@@ -16,8 +16,10 @@ export const register = async (req, res, next) => {
   };
 
   return res.status(201).send({
-    message: "Registration successfully!"
-  });
+    message: "Registration successfully!",
+    user: result.user, 
+    token: result.token 
+});
 
     } catch (error) {
         next(error);
