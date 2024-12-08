@@ -28,7 +28,7 @@ export const userRegistersServices = async (information) => {
         { expiresIn: '1h' } 
     );
 
-    return { user: newUser, token };
+    return { user: { ...newUser.toObject(), password: undefined }, token };
     } catch (error) {
         throw error;
     }
