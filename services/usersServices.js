@@ -28,7 +28,10 @@ export const userRegistersServices = async (information) => {
         { expiresIn: '1h' } 
     );
 
-    return { user: { ...newUser.toObject(), password: undefined }, token };
+    newUser.token = token;
+    await newUser.save();
+
+    return { user: newUser, token };
     } catch (error) {
         throw error;
     }
@@ -47,10 +50,17 @@ export const userLoginServices = async (email, password) => {
       if (!isMatch) {
         return null;
       }
+      
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
       await User.findByIdAndUpdate(user._id, { token });
 
-    return { token, user };
+      return {
+        token,
+        user: {
+          email: user.email,
+          name: user.name,
+        },
+      };
   
     } catch (error) {
       throw new Error("Internal server error during login");

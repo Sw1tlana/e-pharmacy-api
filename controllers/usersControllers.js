@@ -15,11 +15,12 @@ export const register = async (req, res, next) => {
     return res.status(409).send({ message: "Email in use" });
   };
 
-  return res.status(201).send({
-    message: "Registration successfully!",
-    user: result.user, 
-    token: result.token 
-});
+
+    return res.status(201).send({
+      message: "Registration successfully!",
+      user: result.user, 
+      token: result.token 
+    });
 
     } catch (error) {
         next(error);
@@ -46,9 +47,7 @@ export const login = async (req, res, next) => {
 
     return res.status(200).send({
       token: result.token,
-      user: {
-        email: result.email,
-      },
+      user: result.user, 
       message: "Login successful"
     });
 
