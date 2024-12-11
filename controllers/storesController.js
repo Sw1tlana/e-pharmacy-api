@@ -5,7 +5,9 @@ import { getNearestMedicineStoresService,
 export const getStoresList = async (req, res, next) => {
     try {
       const stores = await getMedicineStoresService();
-      res.status(200).json(stores);
+
+      const randomStores = stores.sort(() => 0.5 - Math.random()).slice(0, 6);
+      res.status(200).json(randomStores);
 
     } catch (error) {
         next(error);

@@ -4,7 +4,7 @@ import { getStoresList,
 
 const storesRouter = express.Router();
 
-storesRouter.get('/list', getStoresList);
+storesRouter.get('/', getStoresList);
 
 storesRouter.get('/nearest', getNearestMedicineStores);
 
