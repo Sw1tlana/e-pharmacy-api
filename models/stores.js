@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const nearestPharmsSchema = new mongoose.Schema({
+const pharmsSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -26,6 +26,6 @@ const nearestPharmsSchema = new mongoose.Schema({
     }
 });
 
-const Store = mongoose.model('Store', nearestPharmsSchema);
+const Store = mongoose.model('Store', pharmsSchema);
 
 export default Store;
