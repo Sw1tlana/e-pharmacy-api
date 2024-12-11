@@ -16,7 +16,7 @@ export const getNearestMedicineStores = async (req, res, next) => {
     try {
         const stores = await getNearestMedicineStoresService(); 
         
-        res.status(200).json(randomStores);
+        res.status(200).json();
         
     } catch (error) {
         next(error);  
