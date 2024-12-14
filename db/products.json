@@ -6,7 +6,10 @@
     "suppliers": "Square",
     "stock": "12",
     "price": "89.66",
-    "category": "Medicine"
+    "category": "Medicine",
+    "warning": "While aspirin is effective for reducing pain and inflammation, its use can cause stomach irritation or other side effects, especially with prolonged use.",
+    "recommendation": "Before using aspirin, especially if you have stomach or heart issues, consult a doctor. Do not use it if you have ulcers or other gastrointestinal problems.",
+    "balance_approach": "Aspirin can be beneficial for pain and inflammation but should be used carefully, adhering to dosage instructions to avoid side effects."
   },
   {
     "id": "1",
@@ -15,7 +18,10 @@
     "suppliers": "Acme",
     "stock": "19",
     "price": "34.16",
-    "category": "Heart"
+    "category": "Heart",
+    "warning": "Although paracetamol is generally safe when used correctly, exceeding the recommended dose can lead to severe liver damage.",
+    "recommendation": "Do not exceed the maximum recommended dose of paracetamol, especially if you have liver problems or take other medications containing paracetamol. Consult your doctor before use.",
+    "balance_approach": "Paracetamol is an effective pain reliever when used as directed, but it should be taken cautiously to avoid potential liver damage."
   },
   {
     "id": "2",
@@ -24,7 +30,10 @@
     "suppliers": "Beximco",
     "stock": "09",
     "price": "53.76",
-    "category": "Head"
+    "category": "Head",
+    "warning": "Ibuprofen can cause side effects such as stomach irritation, which could lead to ulcers or bleeding, and may worsen kidney function.",
+    "recommendation": "Consult your doctor before using ibuprofen if you have stomach, kidney, or heart issues. Follow the recommended dosage to minimize side effects.",
+    "balance_approach": "Ibuprofen is effective for pain and inflammation but should be used cautiously, especially with long-term use or underlying health conditions."
   },
   {
     "id": "3",
@@ -33,7 +42,10 @@
     "suppliers": "ACI",
     "stock": "14",
     "price": "28.57",
-    "category": "Hand"
+    "category": "Hand",
+    "warning": "Acetaminophen is a safe pain reliever, but an overdose can lead to severe liver damage.",
+    "recommendation": "Do not use acetaminophen if you have liver disease or are taking other medications that contain acetaminophen. Consult your doctor before use.",
+    "balance_approach": "Acetaminophen is a safe and effective pain reliever when used correctly. Always follow dosage instructions to avoid serious side effects."
   },
   {
     "id": "4",
@@ -42,7 +54,10 @@
     "suppliers": "Uniliver",
     "stock": "10",
     "price": "56.34",
-    "category": "Leg"
+    "category": "Leg",
+    "warning": "Naproxen can cause stomach irritation, and prolonged use may increase the risk of serious gastrointestinal problems.",
+    "recommendation": "Do not use naproxen if you have ulcers or gastrointestinal issues. Consult your doctor before use.",
+    "balance_approach": "Naproxen is effective for pain relief, but it should be used cautiously, especially if you have gastrointestinal issues."
   },
   {
     "id": "5",
@@ -51,7 +66,10 @@
     "suppliers": "Square",
     "stock": "25",
     "price": "45.99",
-    "category": "Medicine"
+    "category": "Medicine",
+    "warning": "Amoxicillin is a potent antibiotic, but its misuse or overuse can lead to antibiotic resistance.",
+    "recommendation": "Take amoxicillin only as prescribed by your doctor and according to the instructions. Do not use it for viral infections like the flu or cold.",
+    "balance_approach": "Amoxicillin is effective for bacterial infections, but it’s essential to follow your doctor’s instructions to avoid side effects and resistance."
   },
   {
     "id": "6",
@@ -60,7 +78,10 @@
     "suppliers": "Acme",
     "stock": "17",
     "price": "29.88",
-    "category": "Heart"
+    "category": "Heart",
+    "warning": "Lisinopril may cause side effects such as headaches, dizziness, or low blood pressure.",
+    "recommendation": "Before using lisinopril, consult your doctor, especially if you have blood pressure or kidney problems.",
+    "balance_approach": "Lisinopril is effective for managing hypertension, but it’s important to monitor blood pressure and adhere to the prescribed dosage."
   },
   {
     "id": "7",
@@ -69,7 +90,10 @@
     "suppliers": "Beximco",
     "stock": "11",
     "price": "38.45",
-    "category": "Head"
+    "category": "Head",
+    "warning": "Ciprofloxacin can cause severe side effects such as gastrointestinal issues and liver dysfunction.",
+    "recommendation": "Ciprofloxacin should be prescribed by a doctor and used only for bacterial infections. Do not use it without medical advice.",
+    "balance_approach": "Ciprofloxacin is an effective antibiotic but must be used according to instructions to avoid serious side effects."
   },
   {
     "id": "8",
@@ -78,7 +102,10 @@
     "suppliers": "ACI",
     "stock": "22",
     "price": "24.76",
-    "category": "Hand"
+    "category": "Hand",
+    "warning": "Hydrochlorothiazide can lead to potassium depletion or dehydration with long-term use.",
+    "recommendation": "Consult your doctor before using hydrochlorothiazide, especially if you have kidney or heart problems. Regularly monitor potassium levels in your body.",
+    "balance_approach": "Hydrochlorothiazide is effective for treating hypertension, but it’s important to monitor fluid and electrolyte balance during treatment."
   },
   {
     "id": "9",
@@ -87,7 +114,10 @@
     "suppliers": "Uniliver",
     "stock": "15",
     "price": "48.99",
-    "category": "Leg"
+    "category": "Leg",
+    "warning": "Prednisone is a powerful steroid, and prolonged use can weaken the immune system and increase the risk of infections.",
+    "recommendation": "Take prednisone only as prescribed by your doctor. It’s important not to exceed the recommended dose or use it for extended periods without medical supervision.",
+    "balance_approach": "Prednisone can be effective for treating inflammatory conditions, but proper dosage and duration should be carefully monitored to avoid serious side effects."
   },
   {
     "id": "10",
@@ -96,7 +126,10 @@
     "suppliers": "Square",
     "stock": "18",
     "price": "35.66",
-    "category": "Medicine"
+    "category": "Medicine",
+    "warning": "Propranolol may cause dizziness, fatigue, or low blood pressure. It should be used cautiously in individuals with respiratory conditions like asthma.",
+    "recommendation": "Consult your doctor before using propranolol if you have heart conditions, asthma, or other respiratory issues. Follow the prescribed dosage carefully.",
+    "balance_approach": "Propranolol is effective for managing heart conditions and anxiety but should be used under medical supervision to avoid potential side effects."
   },
   {
     "id": "11",
@@ -105,7 +138,10 @@
     "suppliers": "Acme",
     "stock": "14",
     "price": "42.16",
-    "category": "Heart"
+    "category": "Heart",
+    "warning": "Long-term use of omeprazole may increase the risk of bone fractures and nutrient deficiencies.",
+    "recommendation": "Use omeprazole only as directed by your doctor, especially for conditions like acid reflux or ulcers. Avoid prolonged use unless prescribed.",
+    "balance_approach": "Omeprazole is highly effective for reducing stomach acid, but prolonged usage requires medical supervision to avoid complications."
   },
   {
     "id": "12",
@@ -114,7 +150,10 @@
     "suppliers": "Beximco",
     "stock": "08",
     "price": "27.76",
-    "category": "Head"
+    "category": "Head",
+    "warning": "Diazepam can cause sedation, dependence, or respiratory depression, especially when combined with alcohol or other sedatives.",
+    "recommendation": "Diazepam should only be used as prescribed. Do not mix with alcohol or other sedatives. Consult your doctor for advice on the proper dosage.",
+    "balance_approach": "Diazepam can be highly effective for anxiety or muscle spasms, but it requires careful use due to its sedative effects and potential for dependence."
   },
   {
     "id": "13",
@@ -123,7 +162,10 @@
     "suppliers": "ACI",
     "stock": "30",
     "price": "18.57",
-    "category": "Hand"
+    "category": "Hand",
+    "warning": "Simvastatin can cause muscle pain, liver damage, or increased blood sugar. Regular monitoring is recommended.",
+    "recommendation": "Consult your doctor before using simvastatin if you have liver problems or are on other medications. Monitor for any muscle pain or weakness.",
+    "balance_approach": "Simvastatin is an effective cholesterol-lowering medication, but it requires proper monitoring to avoid side effects, especially with long-term use."
   },
   {
     "id": "14",
@@ -132,7 +174,10 @@
     "suppliers": "Uniliver",
     "stock": "13",
     "price": "52.34",
-    "category": "Leg"
+    "category": "Leg",
+    "warning": "Tramadol is a potent pain reliever that can cause dizziness, nausea, or addiction when misused. It should be used with caution.",
+    "recommendation": "Use tramadol only as prescribed, and avoid exceeding the recommended dose. Do not combine with alcohol or other sedatives.",
+    "balance_approach": "Tramadol is effective for pain relief but should be used carefully under medical supervision to prevent misuse and side effects."
   },
   {
     "id": "15",
@@ -141,7 +186,10 @@
     "suppliers": "Square",
     "stock": "20",
     "price": "31.99",
-    "category": "Medicine"
+    "category": "Medicine",
+    "warning": "Losartan can cause dizziness or an increase in potassium levels. Regular monitoring is required for kidney function and electrolytes.",
+    "recommendation": "Consult your doctor before using losartan if you have kidney disease or are on potassium-sparing diuretics. Regularly check potassium levels.",
+    "balance_approach": "Losartan is effective for controlling blood pressure and protecting kidney function, but it requires regular monitoring for potential side effects."
   },
   {
     "id": "16",
@@ -150,7 +198,10 @@
     "suppliers": "Acme",
     "stock": "12",
     "price": "22.88",
-    "category": "Heart"
+    "category": "Heart",
+    "warning": "Metformin can cause gastrointestinal discomfort or lactic acidosis, a rare but serious condition. Proper monitoring is essential.",
+    "recommendation": "Use metformin as prescribed and monitor for signs of lactic acidosis, especially if you have kidney or liver problems.",
+    "balance_approach": "Metformin is a cornerstone treatment for type 2 diabetes but requires regular monitoring to avoid complications such as lactic acidosis."
   },
   {
     "id": "17",
@@ -159,7 +210,10 @@
     "suppliers": "Beximco",
     "stock": "09",
     "price": "47.76",
-    "category": "Head"
+    "category": "Head",
+    "warning": "Alprazolam can cause sedation, dizziness, and dependence. It should not be used for long-term treatment without medical advice.",
+    "recommendation": "Take alprazolam only as prescribed. Avoid alcohol and other sedatives while using this medication.",
+    "balance_approach": "Alprazolam is useful for short-term anxiety relief, but it should be used cautiously due to the risk of dependence and side effects."
   },
   {
     "id": "18",
@@ -168,7 +222,10 @@
     "suppliers": "ACI",
     "stock": "18",
     "price": "19.57",
-    "category": "Hand"
+    "category": "Hand",
+    "warning": "Atorvastatin can cause muscle pain, liver issues, and digestive problems. Regular blood tests are recommended.",
+    "recommendation": "Consult your doctor before using atorvastatin if you have liver problems. Report any muscle pain or weakness.",
+    "balance_approach": "Atorvastatin is effective for lowering cholesterol but requires regular monitoring to ensure safe and effective use."
   },
   {
     "id": "19",
@@ -177,7 +234,10 @@
     "suppliers": "Uniliver",
     "stock": "16",
     "price": "41.34",
-    "category": "Leg"
+    "category": "Leg",
+    "warning": "Zolpidem can cause sedation, memory issues, or next-day drowsiness. It should be used only for short-term treatment of insomnia.",
+    "recommendation": "Take zolpidem only as prescribed and avoid activities requiring full alertness after taking it, such as driving.",
+    "balance_approach": "Zolpidem is effective for short-term insomnia treatment but requires careful use to prevent side effects like memory issues or next-day drowsiness."
   },
   {
     "id": "20",
@@ -186,7 +246,10 @@
     "suppliers": "Square",
     "stock": "14",
     "price": "15.66",
-    "category": "Medicine"
+    "category": "Medicine",
+    "warning": "Folic acid is generally safe, but excessive use can mask vitamin B12 deficiency and may cause digestive issues.",
+    "recommendation": "Use folic acid as directed, especially during pregnancy, but do not exceed the recommended dose unless advised by a doctor.",
+    "balance_approach": "Folic acid is essential for health, particularly during pregnancy, but should be used in moderation to avoid potential side effects."
   },
   {
     "id": "21",
@@ -195,7 +258,10 @@
     "suppliers": "Acme",
     "stock": "21",
     "price": "18.16",
-    "category": "Heart"
+    "category": "Heart",
+    "warning": "Excessive calcium carbonate use may lead to kidney stones or hypercalcemia.",
+    "recommendation": "Take calcium carbonate as directed, and ensure you are not exceeding the recommended daily intake, especially if you have kidney problems.",
+    "balance_approach": "Calcium carbonate is essential for bone health, but it should be used in moderation to avoid potential complications from overuse."
   },
   {
     "id": "22",
@@ -204,7 +270,10 @@
     "suppliers": "Beximco",
     "stock": "16",
     "price": "12.76",
-    "category": "Head"
+    "category": "Head",
+    "warning": "Overuse of vitamin D may lead to toxicity, causing nausea, weakness, or kidney problems.",
+    "recommendation": "Use vitamin D supplements as directed, and avoid taking excessive doses unless advised by a healthcare professional.",
+    "balance_approach": "Vitamin D is crucial for bone health, but should be taken in appropriate amounts to avoid the risk of toxicity."
   },
   {
     "id": "23",
@@ -213,7 +282,10 @@
     "suppliers": "ACI",
     "stock": "25",
     "price": "23.57",
-    "category": "Hand"
+    "category": "Hand",
+    "warning": "Fish oil may cause fishy aftertaste, digestive upset, or increase bleeding risk for those on blood-thinning medications.",
+    "recommendation": "Take fish oil with meals to reduce digestive discomfort. Consult your doctor if you are on blood thinners or have a bleeding disorder.",
+    "balance_approach": "Fish oil is beneficial for heart health, but should be used carefully, especially by individuals on anticoagulant medications."
   },
   {
     "id": "24",
@@ -222,7 +294,10 @@
     "suppliers": "Uniliver",
     "stock": "19",
     "price": "17.34",
-    "category": "Leg"
+    "category": "Leg",
+    "warning": "Excessive intake of multivitamins, especially fat-soluble vitamins, can lead to toxicity.",
+    "recommendation": "Multivitamins should be taken according to the recommended dosage. Consult a doctor if you have underlying health conditions.",
+    "balance_approach": "Multivitamins can supplement a healthy diet but should not replace a balanced diet. Use them responsibly and avoid excessive doses."
   },
   {
     "id": "25",
@@ -231,7 +306,10 @@
     "suppliers": "Square",
     "stock": "30",
     "price": "6.66",
-    "category": "Dental Care"
+    "category": "Dental Care",
+    "warning": "Using too much toothpaste, especially fluoride toothpaste, can lead to dental fluorosis, especially in young children.",
+    "recommendation": "Use a small amount of toothpaste and avoid swallowing it, especially for young children.",
+    "balance_approach": "Toothpaste is essential for oral health, but it's important to use it in moderation and ensure proper brushing techniques."
   },
   {
     "id": "26",
@@ -240,7 +318,10 @@
     "suppliers": "Acme",
     "stock": "25",
     "price": "8.16",
-    "category": "Dental Care"
+    "category": "Dental Care",
+    "warning": "Overuse of mouthwash can cause irritation in the mouth and may disrupt the natural bacteria balance.",
+    "recommendation": "Use mouthwash as directed, ideally once or twice a day, and avoid swallowing it.",
+    "balance_approach": "Mouthwash helps maintain oral hygiene, but should be used in moderation to avoid irritation and ensure long-term oral health."
   },
   {
     "id": "27",
@@ -249,7 +330,10 @@
     "suppliers": "Beximco",
     "stock": "20",
     "price": "4.76",
-    "category": "Dental Care"
+    "category": "Dental Care",
+    "warning": "Using a toothbrush with hard bristles can damage gums or enamel over time.",
+    "recommendation": "Use a toothbrush with soft bristles and replace it every 3-4 months, or sooner if the bristles are frayed.",
+    "balance_approach": "A good toothbrush is essential for maintaining oral hygiene, but it's important to choose the right type to protect your gums and enamel."
   },
   {
     "id": "28",
@@ -258,7 +342,10 @@
     "suppliers": "ACI",
     "stock": "14",
     "price": "11.57",
-    "category": "Skin Care"
+    "category": "Skin Care",
+    "warning": "Harsh facial cleansers may cause skin irritation or dryness, especially for sensitive skin types.",
+    "recommendation": "Choose a facial cleanser suitable for your skin type. Avoid overuse and follow up with a moisturizer.",
+    "balance_approach": "Facial cleansers are essential for skin care, but it’s important to select gentle formulas and avoid over-cleansing."
   },
   {
     "id": "29",
@@ -267,6 +354,9 @@
     "suppliers": "Uniliver",
     "stock": "18",
     "price": "13.34",
-    "category": "Skin Care"
+    "category": "Skin Care",
+    "warning": "Overuse of moisturizer may lead to clogged pores or skin irritation in some cases.",
+    "recommendation": "Apply moisturizer in moderation, especially for your face. Choose one suitable for your skin type (e.g., oily, dry, sensitive).",
+    "balance_approach": "Moisturizers are crucial for keeping skin hydrated, but should be used appropriately based on your skin's needs and condition."
   }
 ]
