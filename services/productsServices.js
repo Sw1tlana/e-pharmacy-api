@@ -19,7 +19,7 @@ export const getMedicinesProductsServises = async (filter= {}, page, limit) => {
 
 export const getProductDetailsServices = async (productId) => {
   try {
- const product = await Product.findById({ productId } );
+ const product = await Product.findById(productId);
  return product;
 
   } catch(error) {
