@@ -42,9 +42,9 @@ export const updateCartServices = async (userId, updatedProducts) => {
   try {
     const cart = await Cart.findOne({ userId });
 
-    if (cart.length === 0) {
-      return res.status(200).json({ message: "Cart is empty" });
-    }
+    if (!cart) {
+      return { message: "Cart is empty" };
+    };
 
     updatedProducts.forEach((updatedProduct) => {
       const productIndex = cart.products.findIndex(

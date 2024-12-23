@@ -1,6 +1,7 @@
 import User from '../models/users.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 export const userRegistersServices = async (information) => {
   

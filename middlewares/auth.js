@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/users.js";
+import "dotenv/config"; 
 
 function auth(req, res, next) {
   const authorizationHeader = req.headers.authorization;
@@ -9,7 +10,7 @@ function auth(req, res, next) {
     return res.status(401).send({ message: "Not authorized" });
   }
 
-  const [bearer, token] = authorizationHeader.split(" ", 2);
+  const [bearer, token] = authorizationHeader.split(" ", 1);
   if (bearer !== "Bearer") {
     return res.status(401).send({ message: "Not authorized" });
   }

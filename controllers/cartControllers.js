@@ -26,7 +26,7 @@ export const updateCart = async (req, res, next) => {
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
-    }ж
+    };
 
     const updatedCartItem = await updateCartServices(userId, updatedProducts);
     res.status(200).json({ message: "Cart updated successfully!", cart: updatedCartItem });
