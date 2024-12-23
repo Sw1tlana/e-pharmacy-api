@@ -42,9 +42,9 @@ export const updateCartServices = async (userId, updatedProducts) => {
   try {
     const cart = await Cart.findOne({ userId });
 
-    if (!cart) {
-      throw new Error('The cart is empty');
-    };
+    if (cart.length === 0) {
+      return res.status(200).json({ message: "Cart is empty" });
+    }
 
     updatedProducts.forEach((updatedProduct) => {
       const productIndex = cart.products.findIndex(
@@ -65,7 +65,10 @@ export const updateCartServices = async (userId, updatedProducts) => {
       }
     });
     cart.totalAmount = cart.products.reduce((total, product) => total + product.totalPrice, 0);
+    console.log('Cart before saving:', cart);
     await cart.save();
+
+    console.log('Updated cart:', cart); 
     return cart;
 
   }catch (error) {

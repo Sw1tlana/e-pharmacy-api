@@ -3,6 +3,7 @@ import User from "../models/users.js";
 
 function auth(req, res, next) {
   const authorizationHeader = req.headers.authorization;
+  console.log('Authorization Header:', authorizationHeader);
 
   if (typeof authorizationHeader !== "string") {
     return res.status(401).send({ message: "Not authorized" });
@@ -13,8 +14,10 @@ function auth(req, res, next) {
     return res.status(401).send({ message: "Not authorized" });
   }
 
+  console.log('Token:', token);
   jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
     if (err) {
+      console.error('Token verification error:', err);
       return res.status(401).send({ message: "Not authorized" });
     }
     try {
