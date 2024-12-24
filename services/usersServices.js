@@ -3,6 +3,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
+const generateAccessToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+
+const generateRefreshToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d"});
+};
+
 export const userRegistersServices = async (information) => {
   
     try {
@@ -10,8 +18,8 @@ export const userRegistersServices = async (information) => {
 
       const user = await User.findOne({email});
 
-      if (user !== null) {
-        return null;
+      if (user) {
+        return { message: "Email is already in use" }; 
       };
 
       const passwordHash = await bcrypt.hash(password, 10);
@@ -23,16 +31,24 @@ export const userRegistersServices = async (information) => {
         password: passwordHash, 
       });
 
-      const token = jwt.sign(
-        { id: newUser._id, email: newUser.email },
-        process.env.JWT_SECRET, 
-        { expiresIn: '1h' } 
-    );
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    
+      newUser.token = token;
 
-    newUser.token = token;
     await newUser.save();
 
-    return { user: newUser, token };
+    return {
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone,
+      },
+      token,
+    };
+
     } catch (error) {
         throw error;
     }
@@ -45,22 +61,22 @@ export const userLoginServices = async (email, password) => {
       if (!user) {
         return null;
       }
-  
-      const isMatch = await bcrypt.compare(password, user.password);
-  
-      if (!isMatch) {
+    
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
         return null;
       }
-      
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-      await User.findByIdAndUpdate(user._id, { token });
+
+      const accessToken = generateAccessToken(user._id);
+      const refreshToken = generateRefreshToken(user._id);
+    
+      user.refreshToken = refreshToken;
+      await user.save();
 
       return {
-        token,
-        user: {
-          email: user.email,
-          name: user.name,
-        },
+        token: accessToken,
+        refreshToken, 
+        user: { id: user._id, name: user.name, email: user.email },
       };
   
     } catch (error) {
@@ -70,7 +86,7 @@ export const userLoginServices = async (email, password) => {
 
 export const userLogoutService = async(id) => {
   try {
-    await User.findByIdAndUpdate(id, { token: null }, { new: true });
+    await User.findByIdAndUpdate(id, { refreshToken: null }, { new: true });
   } catch (error) {
     throw error;
   }

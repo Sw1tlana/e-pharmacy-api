@@ -1,4 +1,6 @@
 import usersServices, { getUserInfoServices } from "../services/usersServices.js";
+import jwt from "jsonwebtoken";
+import User from "../models/users.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -56,15 +58,50 @@ export const login = async (req, res, next) => {
   }
 };
 
+const refreshTokens = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(400).json({ message: "Refresh token is required" });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    // Перевірте, чи існує користувач із цим refreshToken
+    const user = await User.findOne({ _id: decoded.id });
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    // Створіть нові токени
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+    // Оновіть refreshToken у користувача
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    res.json({
+      accessToken,
+      refreshToken: newRefreshToken,
+      message: "Tokens refreshed successfully"
+    });
+
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid refresh token" });
+  }
+};
+
 export const logout = async (req, res, next) => {
   try {
-   await usersServices.userLogoutService(req.user.id);
+    const userId = req.user.id; 
+    await userLogoutService(userId);  
 
-   return res.status(204).end();
-   
- } catch (error) {
-  next(error);
- }
+    res.status(200).send({ message: "Logged out successfully" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const getUserInfo = async (req, res) => {
@@ -83,6 +120,7 @@ export default {
     register,
     login,
     logout,
+    refreshTokens,
     getUserInfo
 };
 
