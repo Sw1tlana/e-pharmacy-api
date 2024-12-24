@@ -58,19 +58,24 @@ export const login = async (req, res, next) => {
   }
 };
 
-const refreshTokens = async (req, res) => {
+export const refreshTokens = async (req, res) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken) {
+    console.error("No refresh token provided");
     return res.status(400).json({ message: "Refresh token is required" });
   }
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    console.log("Decoded token:", decoded);
 
     // Перевірте, чи існує користувач із цим refreshToken
     const user = await User.findOne({ _id: decoded.id });
+    console.log("Refresh token in DB:", user.refreshToken);
+
     if (!user || user.refreshToken !== refreshToken) {
+      console.error("Invalid refresh token or mismatch");
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 

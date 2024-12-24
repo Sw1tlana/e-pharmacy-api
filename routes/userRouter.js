@@ -17,7 +17,7 @@ router.post('/login',
 router.post('/logout', authMiddlewares, 
     UsersControllers.logout);
 
-router.post("/refresh-tokens",
+router.post("/refresh-tokens", 
     validateBody(refreshTokenSchema),  
     UsersControllers.refreshTokens);
     
