@@ -1,5 +1,5 @@
 import usersServices, { getUserInfoServices } from "../services/usersServices.js";
-import jwt from "jsonwebtoken";
+import { generateAccessToken } from "../services/usersServices.js";
 import User from "../models/users.js";
 
 export const register = async (req, res, next) => {
@@ -49,6 +49,7 @@ export const login = async (req, res, next) => {
 
     return res.status(200).send({
       token: result.token,
+      refreshToken: result.refreshToken,
       user: result.user, 
       message: "Login successful"
     });
@@ -58,43 +59,33 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const refreshTokens = async (req, res) => {
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) {
-    console.error("No refresh token provided");
-    return res.status(400).json({ message: "Refresh token is required" });
-  }
-
+export const refreshTokens = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    console.log("Decoded token:", decoded);
+    const { refreshToken } = req.body;
 
-    // Перевірте, чи існує користувач із цим refreshToken
-    const user = await User.findOne({ _id: decoded.id });
-    console.log("Refresh token in DB:", user.refreshToken);
-
-    if (!user || user.refreshToken !== refreshToken) {
-      console.error("Invalid refresh token or mismatch");
-      return res.status(403).json({ message: "Invalid refresh token" });
+    if (!refreshToken) {
+      return res.status(400).send({ message: "Refresh token is required" });
     }
 
-    // Створіть нові токени
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+      return res.status(403).send({ message: "Invalid or expired refresh token" });
+    }
 
-    // Оновіть refreshToken у користувача
-    user.refreshToken = newRefreshToken;
+    // Генеруємо новий accessToken
+    const newAccessToken = generateAccessToken(user._id);
+
+    // Зберігаємо новий токен в базі даних
+    user.token = newAccessToken;
     await user.save();
 
-    res.json({
-      accessToken,
-      refreshToken: newRefreshToken,
-      message: "Tokens refreshed successfully"
+    return res.status(200).send({
+      token: newAccessToken,
+      message: "Token refreshed successfully"
     });
 
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid refresh token" });
+  } catch (error) {
+    next(error);
   }
 };
 

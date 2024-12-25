@@ -3,11 +3,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-const generateAccessToken = (userId) => {
+export const generateAccessToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
-const generateRefreshToken = (userId) => {
+export const generateRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
@@ -57,6 +57,7 @@ export const userRegistersServices = async (information) => {
 export const userLoginServices = async (email, password) => {
     try {
       const user = await User.findOne({ email });
+      console.log("User found:", user);
   
       if (!user) {
         return null;
@@ -69,6 +70,7 @@ export const userLoginServices = async (email, password) => {
 
       const accessToken = generateAccessToken(user._id);
       const refreshToken = generateRefreshToken(user._id);
+      console.log("Refresh token from request:", refreshToken);
     
       user.refreshToken = refreshToken;
       await user.save();
@@ -116,5 +118,7 @@ export default {
  userRegistersServices,
  userLoginServices,
  userLogoutService,
- getUserInfoServices
+ getUserInfoServices,
+ generateAccessToken,
+ generateRefreshToken
 };

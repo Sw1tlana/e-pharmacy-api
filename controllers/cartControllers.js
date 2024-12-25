@@ -28,6 +28,10 @@ export const updateCart = async (req, res, next) => {
       return res.status(400).json({ message: "User ID is required" });
     };
 
+    if (!updatedProducts || !Array.isArray(updatedProducts) || updatedProducts.length === 0) {
+      return res.status(400).json({ message: "Updated products array is required and must be non-empty" });
+    }
+    
     const updatedCartItem = await updateCartServices(userId, updatedProducts);
     res.status(200).json({ message: "Cart updated successfully!", cart: updatedCartItem });
 
