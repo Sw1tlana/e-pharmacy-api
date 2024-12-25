@@ -1,4 +1,5 @@
 import Cart from "../models/cart.js";
+import mongoose from "mongoose";
 
 export const getCartItemsServices = async () => {
   try {
@@ -12,22 +13,16 @@ export const getCartItemsServices = async () => {
   }
 };
 
-export const checkoutServices = async (products, { 
-  userId, 
-  status, 
-  order_date,
-  paymentMethod, }) => {
-
+export const checkoutServices = async (products, { userId, totalAmount, paymentMethod, customer }) => {
   try {
-    const totalAmount = products.reduce((acc, product) => acc + product.totalPrice, 0);
-
     const cartData = {
       userId,
       products,
       totalAmount,
-      status,
-      order_date,
+      status: 'Pending', 
+      order_date: new Date(),
       paymentMethod,
+      customer, 
     };
 
     const createdCart = await Cart.create(cartData); 
@@ -38,19 +33,27 @@ export const checkoutServices = async (products, {
   }
 };
 
-export const updateCartServices = async (userId, updatedProducts) => {
+export const updateCartServices = async (userId, updatedProducts, paymentMethod) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error('Invalid userId format');
+    }
+
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
       return { message: "Cart is empty" };
-    };
+    }
 
     updatedProducts.forEach((updatedProduct) => {
+      if (!updatedProduct.productId || !updatedProduct.quantity || !updatedProduct.price) {
+        throw new Error('Invalid product data in updatedProducts');
+      }
+
       const productIndex = cart.products.findIndex(
         (product) => product.productId.toString() === updatedProduct.productId.toString()
       );
-    
+
       if (productIndex !== -1) {
         cart.products[productIndex].quantity = updatedProduct.quantity;
         cart.products[productIndex].totalPrice = updatedProduct.quantity * cart.products[productIndex].price;
@@ -64,15 +67,27 @@ export const updateCartServices = async (userId, updatedProducts) => {
         });
       }
     });
-    cart.totalAmount = cart.products.reduce((total, product) => total + product.totalPrice, 0);
-    console.log('Cart before saving:', cart);
-    await cart.save();
 
-    console.log('Updated cart:', cart); 
+    cart.totalAmount = cart.products.reduce((total, product) => total + product.totalPrice, 0);
+
+    if (paymentMethod) {
+      cart.paymentMethod = paymentMethod;
+    }
+
+    console.log('Cart before saving:', cart);
+
+    try {
+      await cart.save();
+    } catch (error) {
+      console.error('Error while saving cart:', error.message);
+      throw error;
+    }
+
+    console.log('Updated cart:', cart);
     return cart;
 
-  }catch (error) {
+  } catch (error) {
+    console.error('Error in updateCartServices:', error.message);
     throw error;
   }
-
 };
