@@ -72,10 +72,9 @@ export const refreshTokens = async (req, res, next) => {
       return res.status(403).send({ message: "Invalid or expired refresh token" });
     }
 
-    // Генеруємо новий accessToken
+
     const newAccessToken = generateAccessToken(user._id);
 
-    // Зберігаємо новий токен в базі даних
     user.token = newAccessToken;
     await user.save();
 

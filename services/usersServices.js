@@ -57,7 +57,6 @@ export const userRegistersServices = async (information) => {
 export const userLoginServices = async (email, password) => {
     try {
       const user = await User.findOne({ email });
-      console.log("User found:", user);
   
       if (!user) {
         return null;
@@ -70,11 +69,9 @@ export const userLoginServices = async (email, password) => {
 
       const accessToken = generateAccessToken(user._id);
       const refreshToken = generateRefreshToken(user._id);
-      console.log("Refresh token from request:", refreshToken);
     
       user.refreshToken = refreshToken;
       await user.save();
-      console.log("New refresh token saved in DB:", user.refreshToken);
 
       return {
         token: accessToken,
@@ -111,7 +108,6 @@ export const getUserInfoServices = async (userId) => {
   } catch(error) {
     throw error;
   }
-
 };
 
 export default {

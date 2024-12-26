@@ -2,7 +2,9 @@ import express from 'express';
 import UsersControllers from '../controllers/usersControllers.js';
 import validateBody from "../helpers/validateBody.js";
 import authMiddlewares from "../middlewares/auth.js";
-import { registersSchema, loginSchema, refreshTokenSchema } from "../schemas/usersShemas.js";
+import { registersSchema, 
+         loginSchema, 
+         refreshTokenSchema } from "../schemas/usersShemas.js";
 
 const router = express.Router();
 

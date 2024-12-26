@@ -74,20 +74,15 @@ export const updateCartServices = async (userId, updatedProducts, paymentMethod)
       cart.paymentMethod = paymentMethod;
     }
 
-    console.log('Cart before saving:', cart);
-
     try {
       await cart.save();
     } catch (error) {
-      console.error('Error while saving cart:', error.message);
       throw error;
     }
 
-    console.log('Updated cart:', cart);
     return cart;
 
   } catch (error) {
-    console.error('Error in updateCartServices:', error.message);
     throw error;
   }
 };
