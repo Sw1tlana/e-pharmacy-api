@@ -4,11 +4,11 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 export const generateAccessToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 };
 
 export const generateRefreshToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
 export const userRegistersServices = async (information) => {
@@ -71,6 +71,7 @@ export const userLoginServices = async (email, password) => {
       const refreshToken = generateRefreshToken(user._id);
     
       user.refreshToken = refreshToken;
+      user.token = accessToken;
       await user.save();
 
       return {
@@ -86,8 +87,13 @@ export const userLoginServices = async (email, password) => {
 
 export const userLogoutService = async(id) => {
   try {
-    await User.findByIdAndUpdate(id, { refreshToken: null }, { new: true });
+    const user = await User.findByIdAndUpdate(id, { refreshToken: null }, { new: true });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    console.log(`User ${id} logged out successfully.`);
   } catch (error) {
+    console.error('Logout service error:', error);
     throw error;
   }
 };

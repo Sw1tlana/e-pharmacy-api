@@ -1,5 +1,5 @@
 import usersServices, { getUserInfoServices } from "../services/usersServices.js";
-import { generateAccessToken } from "../services/usersServices.js";
+import { generateAccessToken, generateRefreshToken } from "../services/usersServices.js";
 import User from "../models/users.js";
 
 export const register = async (req, res, next) => {
@@ -61,53 +61,76 @@ export const login = async (req, res, next) => {
 
 export const refreshTokens = async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
+    const { refreshToken: oldRefreshToken } = req.body;
 
-    if (!refreshToken) {
+    // Перевірка на наявність refreshToken у запиті
+    if (!oldRefreshToken) {
       return res.status(400).send({ message: "Refresh token is required" });
     }
 
-    const user = await User.findOne({ refreshToken });
+    // Знаходимо користувача за refreshToken
+    const user = await User.findOne({ refreshToken: oldRefreshToken });
+
     if (!user) {
       return res.status(403).send({ message: "Invalid or expired refresh token" });
     }
 
-
+    // Генерація нового accessToken і refreshToken
     const newAccessToken = generateAccessToken(user._id);
+    const newRefreshToken = generateRefreshToken(user._id);
 
+    // Оновлення токенів у користувача
     user.token = newAccessToken;
+    user.refreshToken = newRefreshToken;
     await user.save();
 
+    // Повернення нового accessToken і refreshToken
     return res.status(200).send({
-      token: newAccessToken,
-      message: "Token refreshed successfully"
+      token: newAccessToken, // Повертаємо тільки новий accessToken
+      refreshToken: newRefreshToken,
+      message: "Tokens refreshed successfully"
     });
 
   } catch (error) {
-    next(error);
+    next(error);  // Передаємо помилку наступному middleware
   }
 };
 
 export const logout = async (req, res, next) => {
   try {
-    const userId = req.user.id; 
-    await userLogoutService(userId);  
+    const userId = req.user._id;
 
-    res.status(200).send({ message: "Logged out successfully" });
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is missing" });
+    }
+
+    const user = await User.findByIdAndUpdate(userId, { refreshToken: null }, { new: true });
+
+    if (!user) {
+      return res.status(400).json({ message: "Logout failed" });
+    }
+
+    res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     next(error);
   }
+
 };
 
 export const getUserInfo = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-    const userInfo = await getUserInfoServices(userId);
-
-  res.json(userInfo);
+    res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    });
   } catch (error) {
-   return res.status(500).json({message: 'Error retrieving user information'});
+    return res.status(500).json({ message: 'Error retrieving user information' });
   }
 };
 
