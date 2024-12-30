@@ -100,18 +100,31 @@ export const logout = async (req, res, next) => {
   try {
     const userId = req.user._id;
 
+    // Якщо потрібен лише logout по access token
     if (!userId) {
+      console.log('Logout failed: Missing user ID');
       return res.status(400).json({ message: "User ID is missing" });
     }
 
-    const user = await User.findByIdAndUpdate(userId, { refreshToken: null }, { new: true });
+    // Тут можна зробити додаткові перевірки, якщо ви хочете, щоб refreshToken також було видалено
+    const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(400).json({ message: "Logout failed" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Logout successful" });
+    // Видалення access token (за потреби можна зробити додаткові кроки)
+    user.token = null;
+    await user.save();
+
+    console.log(`User ${userId} logged out successfully`);
+
+    res.status(200).json({
+      message: "Logout successful"
+    });
+
   } catch (error) {
+    console.error('Error during logout:', error);
     next(error);
   }
 

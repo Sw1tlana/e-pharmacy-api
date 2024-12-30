@@ -6,37 +6,52 @@ async function auth(req, res, next) {
   if (req.path === '/refresh-tokens') {
     return next();
 }
-
 const { authorization = "" } = req.headers;
-console.log("req.headers", req.headers);
-console.log(req.headers.authorization);
-const [bearer, token] = authorization.split(" ");
 
-if (bearer !== "Bearer") {
-    console.log('bearer', bearer);
-    return next();
+// Перевіряємо, чи є заголовок
+if (!authorization) {
+  return res.status(401).json({ message: "Unauthorized: Token missing or malformed" });
 }
 
+console.log("Authorization header (original):", authorization);
+
+const trimmedAuthorization = authorization.replace(/\s+/g, " ").trim();
+console.log("Authorization header (trimmed):", trimmedAuthorization);
+
+const [bearer, token] = trimmedAuthorization.split(" ");
+console.log("Split parts:", bearer, token);
+
+if (bearer !== "Bearer" || !token) {
+  return res.status(401).json({ message: "Unauthorized: Token missing or malformed" });
+}
 try {
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(`Decoded ID: ${id}`);
-    const user = await User.findById(id);
-    console.log(user);
+  // Декодувати токен
+  const { id } = jwt.verify(token, process.env.JWT_SECRET);
+  console.log(`Decoded ID: ${id}`);
 
-    if (!user || user.token !== token || !user.token) {
-        return next();
-    }
+  // Знайти користувача в базі
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized: User not found" });
+  }
 
-    req.user = user;
-    console.log('req.user', req.user);
-    next();
+  if (!user.token || user.token !== token) {
+    return res.status(401).json({ message: "Unauthorized: Token mismatch" });
+  }
+
+  req.user = user; // Додати користувача в req
+  next();
 } catch (error) {
-    if (error.name === "TokenExpiredError") {
-        console.log("Token expired, need refresh");
-        return res.status(401).json({ message: "Token expired. Please refresh your token." });
-      }
-    console.log("Auth error:", error); 
-    next();
+  if (error.name === "TokenExpiredError") {
+    console.log("Token expired");
+    return res.status(401).json({ message: "Token expired. Please refresh your token." });
+  } else if (error.name === "JsonWebTokenError") {
+    console.log("Invalid token");
+    return res.status(401).json({ message: "Invalid token" });
+  }
+
+  console.error("Auth error:", error.message);
+  res.status(500).json({ message: "Internal server error" });
 }
 };
 

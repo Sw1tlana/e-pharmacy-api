@@ -3,39 +3,47 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-export const generateAccessToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-};
+export function generateAccessToken(userId) {
+  try {
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  } catch (err) {
+    console.error("Error generating access token:", err.message);
+    throw err;
+  }
+}
 
-export const generateRefreshToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
-};
+export function generateRefreshToken(userId) {
+  try {
+    return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+  } catch (err) {
+    console.error("Error generating refresh token:", err.message);
+    throw err;
+  }
+}
 
 export const userRegistersServices = async (information) => {
-  
-    try {
-      const {name, email, phone, password } = information;
-
-      const user = await User.findOne({email});
-
-      if (user) {
-        return { message: "Email is already in use" }; 
-      };
-
-      const passwordHash = await bcrypt.hash(password, 10);
-
-      const newUser = await User.create({
-        name,
-        email,
-        phone,
-        password: passwordHash, 
-      });
-
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
+  try {
+    const { name, email, phone, password } = information;
     
-      newUser.token = token;
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return { message: "Email is already in use" };
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      name,
+      email,
+      phone,
+      password: passwordHash,
+    });
+
+    const token = generateAccessToken(newUser._id);
+    const refreshToken = generateRefreshToken(newUser._id);
+
+    newUser.token = token;
+    newUser.refreshToken = refreshToken;
 
     await newUser.save();
 
@@ -47,11 +55,12 @@ export const userRegistersServices = async (information) => {
         phone: newUser.phone,
       },
       token,
+      refreshToken
     };
 
-    } catch (error) {
-        throw error;
-    }
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const userLoginServices = async (email, password) => {
@@ -85,15 +94,20 @@ export const userLoginServices = async (email, password) => {
     }
   };
 
-export const userLogoutService = async(id) => {
+export const userLogoutService = async(userId) => {
   try {
-    const user = await User.findByIdAndUpdate(id, { refreshToken: null }, { new: true });
+    const user = await User.findById(userId);
+
     if (!user) {
-      throw new Error('User not found');
+     throw new Error('User not found!');
     }
-    console.log(`User ${id} logged out successfully.`);
-  } catch (error) {
-    console.error('Logout service error:', error);
+
+    return {
+      name: user.name,
+      email: user.email
+    };
+
+  } catch(error) {
     throw error;
   }
 };
