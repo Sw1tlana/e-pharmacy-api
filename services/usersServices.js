@@ -40,10 +40,8 @@ export const userRegistersServices = async (information) => {
     });
 
     const token = generateAccessToken(newUser._id);
-    const refreshToken = generateRefreshToken(newUser._id);
 
     newUser.token = token;
-    newUser.refreshToken = refreshToken;
 
     await newUser.save();
 
@@ -54,8 +52,7 @@ export const userRegistersServices = async (information) => {
         email: newUser.email,
         phone: newUser.phone,
       },
-      token,
-      refreshToken
+      token
     };
 
   } catch (error) {
