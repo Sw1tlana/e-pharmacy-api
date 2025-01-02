@@ -1,4 +1,4 @@
-import usersServices, { getUserInfoServices } from "../services/usersServices.js";
+import usersServices from "../services/usersServices.js";
 import { generateAccessToken, generateRefreshToken } from "../services/usersServices.js";
 import User from "../models/users.js";
 
