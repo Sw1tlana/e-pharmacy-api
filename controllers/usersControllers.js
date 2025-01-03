@@ -63,36 +63,31 @@ export const refreshTokens = async (req, res, next) => {
   try {
     const { refreshToken: oldRefreshToken } = req.body;
 
-    // Перевірка на наявність refreshToken у запиті
     if (!oldRefreshToken) {
       return res.status(400).send({ message: "Refresh token is required" });
     }
 
-    // Знаходимо користувача за refreshToken
     const user = await User.findOne({ refreshToken: oldRefreshToken });
 
     if (!user) {
       return res.status(403).send({ message: "Invalid or expired refresh token" });
     }
 
-    // Генерація нового accessToken і refreshToken
     const newAccessToken = generateAccessToken(user._id);
     const newRefreshToken = generateRefreshToken(user._id);
 
-    // Оновлення токенів у користувача
     user.token = newAccessToken;
     user.refreshToken = newRefreshToken;
     await user.save();
-
-    // Повернення нового accessToken і refreshToken
+ 
     return res.status(200).send({
-      token: newAccessToken, // Повертаємо тільки новий accessToken
+      token: newAccessToken,
       refreshToken: newRefreshToken,
       message: "Tokens refreshed successfully"
     });
 
   } catch (error) {
-    next(error);  // Передаємо помилку наступному middleware
+    next(error);  
   }
 };
 
@@ -100,20 +95,17 @@ export const logout = async (req, res, next) => {
   try {
     const userId = req.user._id;
 
-    // Якщо потрібен лише logout по access token
     if (!userId) {
       console.log('Logout failed: Missing user ID');
       return res.status(400).json({ message: "User ID is missing" });
     }
 
-    // Тут можна зробити додаткові перевірки, якщо ви хочете, щоб refreshToken також було видалено
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Видалення access token (за потреби можна зробити додаткові кроки)
     user.token = null;
     await user.save();
 
