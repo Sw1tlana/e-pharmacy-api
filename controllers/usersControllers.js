@@ -43,10 +43,6 @@ export const login = async (req, res, next) => {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
-    if (result === false) {
-      return res.status(401).send({ message: "Please verify your email" });
-    }
-
     return res.status(200).send({
       token: result.token,
       refreshToken: result.refreshToken,
@@ -55,6 +51,7 @@ export const login = async (req, res, next) => {
     });
 
   } catch (error) {
+    console.error("Error during login:", error);
     next(error);
   }
 };
@@ -124,17 +121,21 @@ export const logout = async (req, res, next) => {
 
 export const getUserInfo = async (req, res) => {
   try {
-    const user = req.user;
-    if (!user) {
+    console.log("User from request:", req.user);
+
+    if (!req.user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    });
+    const userInfo = await usersServices.getUserInfoServices(req.user._id);
+
+    if (!userInfo) {
+      return res.status(404).json({ message: 'User info not found' });
+    }
+
+    return res.status(200).json(userInfo); 
   } catch (error) {
+    console.error('Error in getUserInfo:', error.message);  
     return res.status(500).json({ message: 'Error retrieving user information' });
   }
 };

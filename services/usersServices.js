@@ -63,6 +63,10 @@ export const userRegistersServices = async (information) => {
 export const userLoginServices = async (email, password) => {
     try {
       const user = await User.findOne({ email });
+
+      if (!email || !password) {
+        throw new Error("Email and password are required");
+      }
   
       if (!user) {
         return null;
@@ -75,6 +79,7 @@ export const userLoginServices = async (email, password) => {
 
       const accessToken = generateAccessToken(user._id);
       const refreshToken = generateRefreshToken(user._id);
+      await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken })
     
       user.refreshToken = refreshToken;
       user.token = accessToken;
@@ -111,19 +116,23 @@ export const userLogoutService = async(userId) => {
 
 export const getUserInfoServices = async (userId) => {
   try {
+    console.log('Searching for user with ID:', userId);  
     const user = await User.findById(userId);
+    console.log('Found user:', user);
 
     if (!user) {
-     throw new Error('User not found!');
+      console.error('User not found!');  
+      throw new Error('User not found!');
     }
+    console.log('User found:', user);
 
     return {
       name: user.name,
       email: user.email
     };
-
   } catch(error) {
-    throw error;
+    console.error('Error in getUserInfoServices:', error.message);  
+    throw new Error(error.message || 'Error retrieving user information');
   }
 };
 
