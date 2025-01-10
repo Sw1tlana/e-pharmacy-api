@@ -62,12 +62,13 @@ export const userRegistersServices = async (information) => {
 
 export const userLoginServices = async (email, password) => {
     try {
-      const user = await User.findOne({ email });
-
+      
       if (!email || !password) {
         throw new Error("Email and password are required");
       }
-  
+
+      const user = await User.findOne({ email });
+
       if (!user) {
         return null;
       }
@@ -80,7 +81,7 @@ export const userLoginServices = async (email, password) => {
       const accessToken = generateAccessToken(user._id);
       const refreshToken = generateRefreshToken(user._id);
       
-      await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken })
+      await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken }, { new: true });
 
       return {
         token: accessToken,
