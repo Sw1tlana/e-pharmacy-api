@@ -39,11 +39,7 @@ export const userRegistersServices = async (information) => {
       password: passwordHash,
     });
 
-    const payload = {
-      id: newUser._id,
-      email: newUser.email,
-      name: newUser.name,
-    };
+    const payload = { id: newUser._id };
 
     const refreshToken = generateRefreshToken(payload);
     const token = generateAccessToken(payload);
@@ -89,11 +85,7 @@ export const userLoginServices = async (email, password) => {
         return null;
       }
 
-      const payload = {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-      };
+      const payload = { id: user._id };
 
       const accessToken = generateAccessToken(payload);
       const refreshToken = generateRefreshToken(payload);
