@@ -8,8 +8,8 @@ async function auth(req, res, next) {
 }
 const { authorization = "" } = req.headers;
 const [bearer, token] = authorization.split(" ");
-console.log("Authorization header:", authorization); // Логування заголовку
-console.log("Bearer:", bearer, "Token:", token); // Логування після розбиття
+console.log("Authorization header:", authorization);
+console.log("Bearer:", bearer, "Token:", token); 
 
 
 if (bearer !== "Bearer") {
