@@ -68,12 +68,14 @@ export const userLoginServices = async (email, password) => {
       }
 
       const user = await User.findOne({ email });
+      if (!user) return res.status(404).json({ error: 'Користувача не знайдено' });
 
       if (!user) {
         return null;
       }
     
       const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) return res.status(401).json({ error: 'Невірний пароль' });
       if (!isPasswordValid) {
         return null;
       }
