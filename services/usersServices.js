@@ -80,22 +80,15 @@ export const userLoginServices = async (email, password) => {
         return null;
       }
 
-      const accessToken = generateAccessToken(user._id);
-      const refreshToken = generateRefreshToken(user._id);
+      const accessToken = generateAccessToken(user);
+      const refreshToken = generateRefreshToken(user);
       
       await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken }, { new: true });
 
       return {
-        status: 200,
-        data: {
-          token: accessToken,
-          refreshToken,
-          user: {
-            id: user._id,
-            name: user.name,
-            email: user.email
-          }
-        }
+        accessToken, 
+        user,
+        refreshToken,
       };  
   
     } catch (error) {
