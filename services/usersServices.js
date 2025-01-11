@@ -86,14 +86,17 @@ export const userLoginServices = async (email, password) => {
       await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken }, { new: true });
 
       return {
-        token: accessToken,
-        refreshToken, 
-        user: { 
-          id: user._id, 
-          name: user.name, 
-          email: user.email 
-      },
-      };
+        status: 200,
+        data: {
+          token: accessToken,
+          refreshToken,
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email
+          }
+        }
+      };  
   
     } catch (error) {
       throw new Error("Internal server error during login");
