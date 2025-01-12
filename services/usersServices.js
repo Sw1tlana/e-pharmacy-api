@@ -90,7 +90,7 @@ export const userLoginServices = async (email, password) => {
       const { refreshToken: oldRefreshToken } = req.body;
   
       try {
-        jwt.verify(oldRefreshToken, REFRESH_SECRET_KEY);
+        jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
     } catch (error) {
       throw new Error("Refresh token is invalid or expired");
     }
