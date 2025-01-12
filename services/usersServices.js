@@ -85,6 +85,43 @@ export const userLoginServices = async (email, password) => {
     }
   };
 
+  export const refreshTokensServices = async (req, res, next) => {
+    try {
+      const { refreshToken: oldRefreshToken } = req.body;
+  
+      try {
+        jwt.verify(oldRefreshToken, REFRESH_SECRET_KEY);
+    } catch (error) {
+      throw new Error("Refresh token is invalid or expired");
+    }
+  
+    const { id } = jwt.decode(oldRefreshToken);
+    const user = await User.findById(id);
+  
+    if (!user) {
+      throw new Error("User not found");
+    }
+  
+      const payload = { id: user._id };
+      const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  
+      user.token = newToken;
+      user.refreshToken = newRefreshToken;
+      await user.save();
+  
+      await newUser.save();
+      return res.status(200).send({
+        token: newToken,
+        refreshToken: newRefreshToken,
+        message: "Tokens refreshed successfully"
+      });
+  
+    } catch (error) {
+      next(error);  
+    }
+  };
+
 export const userLogoutService = async(userId) => {
   try {
     const user = await User.findById(userId);
@@ -93,9 +130,12 @@ export const userLogoutService = async(userId) => {
      throw new Error('User not found!');
     }
 
+    user.token = null;
+    user.refreshToken = null;
+    await user.save();
+
     return {
-      name: user.name,
-      email: user.email
+      message: "User logged out successfully",
     };
 
   } catch(error) {
@@ -129,5 +169,6 @@ export default {
  userRegistersServices,
  userLoginServices,
  userLogoutService,
- getUserInfoServices
+ getUserInfoServices,
+ refreshTokensServices
 };

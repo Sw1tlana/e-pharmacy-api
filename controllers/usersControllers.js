@@ -12,10 +12,9 @@ export const register = async (req, res, next) => {
       password,
    });
 
-   if (result === null) {
-    return res.status(409).send({ message: "Email in use" });
-  };
-
+   if (!result) {
+    return res.status(409).send({ message: "Email is already in use" });
+  }
 
     return res.status(201).send({
       message: "Registration successfully!",
@@ -57,36 +56,10 @@ export const login = async (req, res, next) => {
 
 export const refreshTokens = async (req, res, next) => {
   try {
-    const { refreshToken: oldRefreshToken } = req.body;
-
-    try {
-      jwt.verify(oldRefreshToken, REFRESH_SECRET_KEY);
+    const result = await usersServices.refreshTokensServices(req.body.refreshToken);
+    return res.status(200).send(result);
   } catch (error) {
-      return next(HttpError(401, "Refresh token is invalid or expired"));
-  }
-
-  const { id } = jwt.decode(oldRefreshToken);
-  const user = await User.findById(id);
-
-  if (!user) {
-      throw HttpError(404, "User not found");
-  }
-
-    const payload = { id: user._id };
-    const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-    const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
-
-    await User.findByIdAndUpdate(user._id, { token: newToken, refreshToken: newRefreshToken });
-
-    await newUser.save();
-    return res.status(200).send({
-      token: newToken,
-      refreshToken: newRefreshToken,
-      message: "Tokens refreshed successfully"
-    });
-
-  } catch (error) {
-    next(error);  
+    next(error);
   }
 };
 
