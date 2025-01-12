@@ -70,8 +70,11 @@ export const refreshTokens = async (req, res, next) => {
       return res.status(403).send({ message: "Invalid or expired refresh token" });
     }
 
-    const newAccessToken = generateAccessToken(user._id);
-    const newRefreshToken = generateRefreshToken(user._id);
+    const payload = {
+      id: user._id,
+  }
+    const newAccessToken = generateAccessToken(payload);
+    const newRefreshToken = generateRefreshToken(payload);
 
     user.token = newAccessToken;
     user.refreshToken = newRefreshToken;

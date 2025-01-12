@@ -3,18 +3,18 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-export function generateAccessToken(userId) {
+export function generateAccessToken(payload) {
   try {
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
   } catch (err) {
     console.error("Error generating access token:", err.message);
     throw err;
   }
 };
 
-export function generateRefreshToken(userId) {
+export function generateRefreshToken(payload) {
   try {
-    return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+    return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
   } catch (err) {
     console.error("Error generating refresh token:", err.message);
     throw err;
@@ -39,9 +39,12 @@ export const userRegistersServices = async (information) => {
       password: passwordHash,
     });
 
+    const payload = {
+      id: newUser._id,
+  }
 
-    const refreshToken = generateRefreshToken(newUser._id);
-    const token = generateAccessToken(newUser._id);
+    const refreshToken = generateRefreshToken(payload);
+    const token = generateAccessToken(payload);
 
     newUser.token = token;
     newUser.refreshToken = refreshToken;
@@ -83,9 +86,12 @@ export const userLoginServices = async (email, password) => {
       if (!isPasswordValid) {
         return null;
       }
+      const payload = {
+        id: user._id,
+    }
 
-      const accessToken = generateAccessToken(user._id);
-      const refreshToken = generateRefreshToken(user._id);
+      const accessToken = generateAccessToken(payload);
+      const refreshToken = generateRefreshToken(payload);
       
       await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken }, { new: true });
 
