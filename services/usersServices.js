@@ -3,24 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-export function generateAccessToken(payload) {
-  try {
-    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-  } catch (err) {
-    console.error("Error generating access token:", err.message);
-    throw err;
-  }
-};
-
-export function generateRefreshToken(payload) {
-  try {
-    return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-  } catch (err) {
-    console.error("Error generating refresh token:", err.message);
-    throw err;
-  }
-}
-
 export const userRegistersServices = async (information) => {
   try {
     const { name, email, phone, password } = information;
@@ -39,12 +21,9 @@ export const userRegistersServices = async (information) => {
       password: passwordHash,
     });
 
-    const payload = {
-      id: newUser._id,
-  }
-
-    const refreshToken = generateRefreshToken(payload);
-    const token = generateAccessToken(payload);
+    const payload = { id: newUser._id };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
     newUser.token = token;
     newUser.refreshToken = refreshToken;
@@ -75,28 +54,24 @@ export const userLoginServices = async (email, password) => {
       }
 
       const user = await User.findOne({ email });
-      if (!user) return res.status(404).json({ error: 'Користувача не знайдено' });
 
       if (!user) {
         return null;
       }
     
       const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) return res.status(401).json({ error: 'Невірний пароль' });
       if (!isPasswordValid) {
         return null;
       }
-      const payload = {
-        id: user._id,
-    }
 
-      const accessToken = generateAccessToken(payload);
-      const refreshToken = generateRefreshToken(payload);
+      const payload = { id: user._id };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
       
-      await User.findByIdAndUpdate(user._id, { token: accessToken, refreshToken }, { new: true });
+      await User.findByIdAndUpdate(user._id, { token, refreshToken }, { new: true });
 
       return {
-        accessToken,
+        token,
         refreshToken,
         user: {
           id: user._id,
@@ -154,7 +129,5 @@ export default {
  userRegistersServices,
  userLoginServices,
  userLogoutService,
- getUserInfoServices,
- generateAccessToken,
- generateRefreshToken
+ getUserInfoServices
 };

@@ -1,5 +1,4 @@
 import usersServices from "../services/usersServices.js";
-import { generateAccessToken, generateRefreshToken } from "../services/usersServices.js";
 import User from "../models/users.js";
 
 export const register = async (req, res, next) => {
@@ -70,19 +69,17 @@ export const refreshTokens = async (req, res, next) => {
       return res.status(403).send({ message: "Invalid or expired refresh token" });
     }
 
-    const payload = {
-      id: user._id,
-  }
-    const newAccessToken = generateAccessToken(payload);
-    const newRefreshToken = generateRefreshToken(payload);
+    const payload = { id: user._id };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
-    user.token = newAccessToken;
-    user.refreshToken = newRefreshToken;
-    await user.save();
- 
+    user.token = token;
+    user.refreshToken = refreshToken;
+
+    await newUser.save();
     return res.status(200).send({
       token: newAccessToken,
-      refreshToken: newRefreshToken,
+      refreshToken: refreshToken,
       message: "Tokens refreshed successfully"
     });
 
