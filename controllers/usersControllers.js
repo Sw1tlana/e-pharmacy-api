@@ -57,10 +57,12 @@ export const login = async (req, res, next) => {
 
 export const refreshTokens = async (req, res, next) => {
   try {
-    const result = await usersServices.refreshTokensServices(req.body.refreshToken);
-    return res.status(200).send(result);
+    const result = await refreshTokensServices(req.body.refreshToken);
+    
+    return res.status(200).json(result);
   } catch (error) {
-    next(error);
+    console.error("Error during token refresh:", error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
 

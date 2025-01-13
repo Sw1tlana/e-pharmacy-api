@@ -74,10 +74,9 @@ export const userLoginServices = async (email, password) => {
         token,
         refreshToken,
         user: {
-          id: user._id,
           name: user.name,
-          email: user.email,
-        },
+          email: user.email
+        }
       };  
   
     } catch (error) {
@@ -87,34 +86,34 @@ export const userLoginServices = async (email, password) => {
 
   export const refreshTokensServices = async (refreshToken) => {
     try {
-      let payload;
-      try {
-          payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-      } catch (error) {
-          throw new Error("Refresh token is invalid or expired");
+
+      if (!refreshToken) {
+        throw new Error("Refresh token is required");
       }
-
-      const user = await User.findById(payload.id);
-
-      if (!user) {
-          throw new Error("User not found");
-      }
-
-      const newToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-      const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-
-      user.token = newToken;
-      user.refreshToken = newRefreshToken;
-      await user.save();
-
-      return {
-          token: newToken,
-          refreshToken: newRefreshToken,
-          message: "Tokens refreshed successfully",
-      };
   
+      try {
+        jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
+      } catch (error) {
+        throw new Error("Refresh token is invalid or expired");
+      }
+  
+      const { id } = jwt.decode(refreshToken);
+  
+      const user = await User.findById(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const payload = { id: user._id };
+      const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
+      const newRefreshToken = jwt.sign(payload, process.env.REFRESH_SECRET_KEY, { expiresIn: "30d" });
+  
+      await User.findByIdAndUpdate(user._id, { token: newToken, refreshToken: newRefreshToken });
+  
+      return { token: newToken, refreshToken: newRefreshToken };
     } catch (error) {
-      throw error;
+
+      console.error("Error refreshing token:", error.message);
+      throw error; 
     }
   };
 
