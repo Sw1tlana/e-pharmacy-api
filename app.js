@@ -9,7 +9,7 @@ import reviewsRouter from "./routes/reviewsRouter.js";
 import cartRouter from "./routes/cartRouter.js";
 import userRouter from "./routes/userRouter.js";
 import cookieParser from 'cookie-parser';
-// import auth from './middlewares/auth.js';
+import auth from './middlewares/auth.js';
 import "dotenv/config";
 
 import './db.js';
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(cookieParser());
-// app.use(auth);
+app.use(auth);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

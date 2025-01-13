@@ -109,7 +109,7 @@ export const userLoginServices = async (email, password) => {
       user.refreshToken = newRefreshToken;
       await user.save();
   
-      await newUser.save();
+      await user.save();
       return res.status(200).send({
         token: newToken,
         refreshToken: newRefreshToken,
