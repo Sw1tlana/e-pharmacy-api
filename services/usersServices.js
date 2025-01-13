@@ -89,22 +89,21 @@ export const userLoginServices = async (email, password) => {
     try {
       const { refreshToken: oldRefreshToken } = req.body;
   
+      let payload;
       try {
-        jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
-    } catch (error) {
-      throw new Error("Refresh token is invalid or expired");
-    }
+        payload = jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
+      } catch (error) {
+        throw new Error("Refresh token is invalid or expired");
+      }
   
-    const { id } = jwt.decode(oldRefreshToken);
-    const user = await User.findById(id);
+      const user = await User.findById(payload.id);
   
-    if (!user) {
-      throw new Error("User not found");
-    }
-  
-      const payload = { id: user._id };
-      const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-      const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+      if (!user) {
+        throw new Error("User not found");
+      }
+      
+      const newToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
   
       user.token = newToken;
       user.refreshToken = newRefreshToken;
