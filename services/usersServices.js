@@ -23,9 +23,7 @@ export const userRegistersServices = async (information) => {
 
     const payload = { id: newUser._id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log("JWT_SECRET:", process.env.JWT_SECRET);
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
-    console.log("JWT_REFRESH_SECRET:", process.env.JWT_REFRESH_SECRET);
 
     newUser.token = token;
     newUser.refreshToken = refreshToken;
