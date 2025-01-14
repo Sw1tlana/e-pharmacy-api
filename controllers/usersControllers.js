@@ -57,8 +57,18 @@ export const login = async (req, res, next) => {
 
 export const refreshTokens = async (req, res, next) => {
   try {
-    const result = await refreshTokensServices(req.body.refreshToken);
-    
+    console.log("Request body:", req.body); 
+
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      console.error("No refresh token provided");
+      return res.status(400).json({ message: "Refresh token is required" });
+    }
+
+    const result = await usersServices.refreshTokensServices(refreshToken);
+
+    console.log("Refresh token response:", result);
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error during token refresh:", error.message);

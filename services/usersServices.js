@@ -86,34 +86,44 @@ export const userLoginServices = async (email, password) => {
 
   export const refreshTokensServices = async (refreshToken) => {
     try {
-
+      console.log("Received refresh token:", refreshToken);
+  
       if (!refreshToken) {
+        console.error("Refresh token is missing");
         throw new Error("Refresh token is required");
       }
   
       try {
-        jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
       } catch (error) {
+        console.error("Invalid or expired refresh token:", error.message);
         throw new Error("Refresh token is invalid or expired");
       }
   
-      const { id } = jwt.decode(refreshToken);
+      const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+      console.log(decoded);
+  
+      const { id } = decoded;
   
       const user = await User.findById(id);
       if (!user) {
+        console.error("User not found for refresh token");
         throw new Error("User not found");
       }
+  
       const payload = { id: user._id };
       const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
-      const newRefreshToken = jwt.sign(payload, process.env.REFRESH_SECRET_KEY, { expiresIn: "30d" });
+      const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "30d" });
+  
+      console.log("Newly generated access token:", newToken);
+      console.log("Newly generated refresh token:", newRefreshToken);
   
       await User.findByIdAndUpdate(user._id, { token: newToken, refreshToken: newRefreshToken });
   
       return { token: newToken, refreshToken: newRefreshToken };
     } catch (error) {
-
       console.error("Error refreshing token:", error.message);
-      throw error; 
+      throw error;
     }
   };
 
