@@ -21,7 +21,11 @@ export const userRegistersServices = async (information) => {
       password: passwordHash,
     });
 
-    const payload = { id: newUser._id };
+    const payload = { 
+      id: newUser._id, 
+      name: newUser.name, 
+      email: newUser.email 
+    };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
@@ -64,7 +68,11 @@ export const userLoginServices = async (email, password) => {
         return null;
       }
 
-      const payload = { id: user._id };
+      const payload = { 
+        id: user._id, 
+        name: user.name, 
+        email: user.email 
+      };
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
       const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
       
@@ -111,7 +119,11 @@ export const userLoginServices = async (email, password) => {
         throw new Error("User not found");
       }
   
-      const payload = { id: user._id };
+      const payload = { 
+        id: user._id, 
+        name: user.name, 
+        email: user.email 
+      };
       const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
       const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "30d" });
   
