@@ -22,9 +22,7 @@ export const userRegistersServices = async (information) => {
     });
 
     const payload = { 
-      id: newUser._id, 
-      name: newUser.name, 
-      email: newUser.email 
+      id: newUser._id
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
@@ -70,9 +68,7 @@ export const userLoginServices = async (email, password) => {
       }
 
       const payload = { 
-        id: user._id, 
-        name: user.name, 
-        email: user.email 
+        id: user._id
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
       const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
@@ -126,9 +122,7 @@ export const userLoginServices = async (email, password) => {
       }
   
       const payload = { 
-        id: user._id, 
-        name: user.name, 
-        email: user.email 
+        id: user._id
       };
       const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
       const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "30d" });
