@@ -12,9 +12,9 @@ export const register = async (req, res, next) => {
       password,
    });
 
-   if (!result) {
-    return res.status(409).send({ message: "Email is already in use" });
-  }
+   if (result.message) {
+    return res.status(409).send({ message: result.message });
+}
 
     return res.status(201).send({
       message: "Registration successfully!",

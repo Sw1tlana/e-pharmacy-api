@@ -54,12 +54,13 @@ export const userLoginServices = async (email, password) => {
     try {
       
       if (!email || !password) {
-        throw new Error("Email and password are required");
+        return { message: "All fields are required" };
       }
 
       const user = await User.findOne({ email });
 
       if (!user) {
+        console.error("User not found for email:", email);
         return null;
       }
     
@@ -76,6 +77,7 @@ export const userLoginServices = async (email, password) => {
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
       const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
       
+      console.log("Tokens generated: ", { token, refreshToken });
       await User.findByIdAndUpdate(user._id, { token, refreshToken }, { new: true });
 
       return {
@@ -88,6 +90,10 @@ export const userLoginServices = async (email, password) => {
       };  
   
     } catch (error) {
+      if (error.code === 11000) {
+        return { message: "Email is already in use" };
+      }
+      console.error("Error during login:", error);
       throw new Error("Internal server error during login");
     }
   };
