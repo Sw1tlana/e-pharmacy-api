@@ -6,10 +6,20 @@ import { getMedicinesProductsServises,
 
 export const getMedicinesProducts = async (req, res, next) => {
 
-   let { page = 1, limit = 12, filter = {} } = req.query;
+   let { page = 1, limit = 12, filter = {}, query } = req.query;
 
    page = parseInt(page, 10);
    limit = parseInt(limit, 10);
+
+   if (query) {
+    filter.name = { $regex: query, $options: 'i' }; 
+  }
+
+   Object.keys(filter).forEach(key => {
+    if (!filter[key]) {
+      delete filter[key];
+    }
+  });
 
    if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
     return res.status(400).json({ message: "Bad request. Invalid page or limit." });
