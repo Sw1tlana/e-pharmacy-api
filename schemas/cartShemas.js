@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const createCartSchema = Joi.object({
-  userId: Joi.string().required(), 
+  email: Joi.string().required(), 
   products: Joi.array().items(
     Joi.object({
       productId: Joi.string().required(), 

@@ -13,10 +13,10 @@ export const getCartItemsServices = async () => {
   }
 };
 
-export const checkoutServices = async (products, { userId, totalAmount, paymentMethod, customer }) => {
+export const checkoutServices = async (products, { email, totalAmount, paymentMethod, customer }) => {
   try {
     const cartData = {
-      userId,
+      email,
       products,
       totalAmount,
       status: 'Pending', 
@@ -33,13 +33,9 @@ export const checkoutServices = async (products, { userId, totalAmount, paymentM
   }
 };
 
-export const updateCartServices = async (userId, updatedProducts, paymentMethod) => {
+export const updateCartServices = async (email, updatedProducts, paymentMethod) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new Error('Invalid userId format');
-    }
-
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ email });
 
     if (!cart) {
       return { message: "Cart is empty" };

@@ -21,10 +21,10 @@ export const getCartItems = async (req, res, next) => {
 
 export const updateCart = async (req, res, next) => {
   try {
-    const { userId, updatedProducts, paymentMethod } = req.body;
+    const { email, updatedProducts, paymentMethod } = req.body;
 
-    if (!userId) {
-      return res.status(400).json({ message: "User ID is required" });
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
 
     if (!updatedProducts || !Array.isArray(updatedProducts) || updatedProducts.length === 0) {
@@ -35,7 +35,7 @@ export const updateCart = async (req, res, next) => {
       return res.status(400).json({ message: "Payment method is required" });
     }
 
-    const updatedCartItem = await updateCartServices(userId, updatedProducts, paymentMethod);
+    const updatedCartItem = await updateCartServices(email, updatedProducts, paymentMethod);
 
     res.status(200).json({ message: "Cart updated successfully!", cart: updatedCartItem });
 
@@ -46,7 +46,7 @@ export const updateCart = async (req, res, next) => {
 
 export const checkout = async (req, res, next) => {
   try {
-    const { userId, products, totalAmount, paymentMethod, customer } = req.body;
+    const { email, products, totalAmount, paymentMethod, customer } = req.body;
 
     if (!products || !Array.isArray(products)) {
       return res.status(400).json({ message: "Products are required and should be an array" });
@@ -81,7 +81,7 @@ export const checkout = async (req, res, next) => {
     const newCart = await checkoutServices(
       updatedProducts, 
       {
-        userId,
+        email,
         totalAmount: finalTotalAmount,
         paymentMethod,
         customer 
