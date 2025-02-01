@@ -72,7 +72,7 @@ export const checkout = async (req, res, next) => {
     }
 
     const { address } = customer;
-    if (!address || !address.city) {
+    if (!address|| !address.street || !address.city) {
       return res.status(400).json({ message: 'Address is incomplete, street and city are required' });
     }
 
