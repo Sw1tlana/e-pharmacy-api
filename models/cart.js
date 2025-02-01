@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const cartSchema = new mongoose.Schema({
   email: { 
-    type: mongoose.Schema.Types.ObjectId,
     type: String, 
     required: true,
   },
@@ -31,22 +30,17 @@ const cartSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  status: { 
-    type: String,
-    enum: ['Pending', 'Completed', 'Cancelled'], 
-    default: 'Pending',
-  },
   paymentMethod: { 
     type: String,
     required: true, 
     enum: ['bank', 'cash'], 
   },
   customer: {
-    firstName: {
-      type: String,
+    email: { 
+      type: String, 
       required: true,
     },
-    lastName: {
+    name: {
       type: String,
       required: true,
     },

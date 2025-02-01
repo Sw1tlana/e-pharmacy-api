@@ -11,16 +11,15 @@ export const createCartSchema = Joi.object({
     })
   ).required(),
   totalAmount: Joi.number().required(),
-  status: Joi.string().valid('Pending', 'Completed', 'Cancelled').required(), 
   order_date: Joi.date().required(),
   paymentMethod: Joi.string().valid('bank', 'cash').required(), 
   customer: Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
+    email: Joi.string().required(), 
+    name: Joi.string().required(),
     phone: Joi.string().required(),
     address: Joi.object({
       street: Joi.string().required(),
-      city: Joi.string().required()
-    }).required()
+      city: Joi.string().required(),
+    }).required(),
   }).required()
 });

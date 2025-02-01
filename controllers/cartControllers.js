@@ -67,12 +67,12 @@ export const checkout = async (req, res, next) => {
       };
     });
 
-    if (!customer || !customer.firstName || !customer.lastName || !customer.phone || !customer.address) {
+    if (!customer || !customer.email || !customer.name || !customer.phone || !customer.address) {
       return res.status(400).json({ message: 'Customer information is incomplete' });
     }
 
     const { address } = customer;
-    if (!address || !address.street || !address.city) {
+    if (!address || !address.city) {
       return res.status(400).json({ message: 'Address is incomplete, street and city are required' });
     }
 
