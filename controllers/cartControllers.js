@@ -71,9 +71,8 @@ export const checkout = async (req, res, next) => {
       return res.status(400).json({ message: 'Customer information is incomplete' });
     }
 
-    const { address } = customer;
-    if (!address|| !address.street || !address.city) {
-      return res.status(400).json({ message: 'Address is incomplete, street and city are required' });
+    if (typeof customer.address !== 'string' || customer.address.trim() === '') {
+      return res.status(400).json({ message: 'Address is required and must be a non-empty string' });
     }
 
     const finalTotalAmount = totalAmount || products.reduce((acc, product) => acc + product.totalPrice, 0);

@@ -49,14 +49,8 @@ const cartSchema = new mongoose.Schema({
       required: true,
     },
     address: {
-      street: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
     },
   },
 }, {

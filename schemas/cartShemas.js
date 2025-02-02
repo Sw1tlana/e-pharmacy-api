@@ -17,9 +17,6 @@ export const createCartSchema = Joi.object({
     email: Joi.string().required(), 
     name: Joi.string().required(),
     phone: Joi.string().required(),
-    address: Joi.object({
-      street: Joi.string().required(),
-      city: Joi.string().required(),
-    }).required(),
+    address: Joi.string().required(),
   }).required()
 });
