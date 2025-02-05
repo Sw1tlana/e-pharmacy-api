@@ -8,6 +8,4 @@ storesRouter.get('/', getStoresList);
 
 storesRouter.get('/nearest', getNearestMedicineStores);
 
-
-
 export default storesRouter;

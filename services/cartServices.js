@@ -1,5 +1,4 @@
 import Cart from "../models/cart.js";
-import mongoose from "mongoose";
 
 export const getCartItemsServices = async () => {
   try {

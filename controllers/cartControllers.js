@@ -89,7 +89,6 @@ export const checkout = async (req, res, next) => {
 
     res.status(200).json({ message: 'Cart created successfully!', cart: newCart });
   } catch (err) {
-    console.error("Error in checkout:", err);
     res.status(500).json({ message: 'An error occurred during checkout', error: err.message });
   }
 };

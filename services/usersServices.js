@@ -73,7 +73,6 @@ export const userLoginServices = async (email, password) => {
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
       const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
       
-      console.log("Tokens generated: ", { token, refreshToken });
       await User.findByIdAndUpdate(user._id, { token, refreshToken }, { new: true });
 
       return {
@@ -89,35 +88,29 @@ export const userLoginServices = async (email, password) => {
       if (error.code === 11000) {
         return { message: "Email is already in use" };
       }
-      console.error("Error during login:", error);
       throw new Error("Internal server error during login");
     }
   };
 
   export const refreshTokensServices = async (refreshToken) => {
     try {
-      console.log("Received refresh token:", refreshToken);
   
       if (!refreshToken) {
-        console.error("Refresh token is missing");
         throw new Error("Refresh token is required");
       }
   
       try {
         jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
       } catch (error) {
-        console.error("Invalid or expired refresh token:", error.message);
         throw new Error("Refresh token is invalid or expired");
       }
   
       const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-      console.log(decoded);
   
       const { id } = decoded;
   
       const user = await User.findById(id);
       if (!user) {
-        console.error("User not found for refresh token");
         throw new Error("User not found");
       }
   
@@ -127,14 +120,10 @@ export const userLoginServices = async (email, password) => {
       const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
       const newRefreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "30d" });
   
-      console.log("Newly generated access token:", newToken);
-      console.log("Newly generated refresh token:", newRefreshToken);
-  
       await User.findByIdAndUpdate(user._id, { token: newToken, refreshToken: newRefreshToken });
   
       return { token: newToken, refreshToken: newRefreshToken };
     } catch (error) {
-      console.error("Error refreshing token:", error.message);
       throw error;
     }
   };
@@ -161,23 +150,18 @@ export const userLogoutService = async(userId) => {
 };
 
 export const getUserInfoServices = async (userId) => {
-  try {
-    console.log('Searching for user with ID:', userId);  
+  try { 
     const user = await User.findById(userId);
-    console.log('Found user:', user);
 
-    if (!user) {
-      console.error('User not found!');  
+    if (!user) { 
       throw new Error('User not found!');
     }
-    console.log('User found:', user);
 
     return {
       name: user.name,
       email: user.email
     };
   } catch(error) {
-    console.error('Error in getUserInfoServices:', error.message);  
     throw new Error(error.message || 'Error retrieving user information');
   }
 };

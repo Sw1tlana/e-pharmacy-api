@@ -5,10 +5,8 @@ import { getMedicinesProducts,
 
 const productsRouter = express.Router();
 
-// Роут для отримання продуктів
 productsRouter.get('/', getMedicinesProducts);
 
-// Роут для отримання деталей продукту
 productsRouter.get('/:productId', getProductDetails);
 
 export default productsRouter;

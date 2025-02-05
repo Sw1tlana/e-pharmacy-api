@@ -57,21 +57,17 @@ export const login = async (req, res, next) => {
 
 export const refreshTokens = async (req, res, next) => {
   try {
-    console.log("Request body:", req.body); 
 
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
-      console.error("No refresh token provided");
       return res.status(400).json({ message: "Refresh token is required" });
     }
 
     const result = await usersServices.refreshTokensServices(refreshToken);
 
-    console.log("Refresh token response:", result);
     return res.status(200).json(result);
   } catch (error) {
-    console.error("Error during token refresh:", error.message);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -81,7 +77,6 @@ export const logout = async (req, res, next) => {
     const userId = req.user._id;
 
     if (!userId) {
-      console.log('Logout failed: Missing user ID');
       return res.status(400).json({ message: "User ID is missing" });
     }
 
@@ -94,14 +89,11 @@ export const logout = async (req, res, next) => {
     user.token = null;
     await user.save();
 
-    console.log(`User ${userId} logged out successfully`);
-
     res.status(200).json({
       message: "Logout successful"
     });
 
   } catch (error) {
-    console.error('Error during logout:', error);
     next(error);
   }
 
@@ -109,7 +101,6 @@ export const logout = async (req, res, next) => {
 
 export const getUserInfo = async (req, res) => {
   try {
-    console.log("User from request:", req.user);
 
     if (!req.user) {
       return res.status(404).json({ message: 'User not found' });
@@ -123,7 +114,6 @@ export const getUserInfo = async (req, res) => {
 
     return res.status(200).json(userInfo); 
   } catch (error) {
-    console.error('Error in getUserInfo:', error.message);  
     return res.status(500).json({ message: 'Error retrieving user information' });
   }
 };
